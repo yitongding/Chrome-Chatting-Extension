@@ -3,18 +3,28 @@
   "description": "DM",
   "version": "1.0",
   "permissions": [
-    "tabs", "http://*/*", "https://*/*"
+    "tabs", 
+    "http://*/*", 
+    "https://*/*", 
+    "activeTab",
+    "declarativeContent"
   ],
+
+  "browser_action": {
+    "default_title": "DM",
+    "default_popup": "popup.html"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["http://*/*","https://*/*"],
+      "js": ["jquery.min.js","socket.io-1.4.5.js", "content_script.js"]
+    }
+  ],
+
   "background": {
-    "scripts": ["popup.js"],
+    "scripts": ["background.js"],
     "persistent": false
   },
-    
-    
-  "browser_action": {
-      "default_title": "DM",
-      "default_icon": "icon.png"
-  },
-    
   "manifest_version": 2
 }

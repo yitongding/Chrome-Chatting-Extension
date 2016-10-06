@@ -15,29 +15,29 @@ module.exports = function(io) {
     // tmp room solution, change to URL later
     /*************************/
     socket.username = "tmp";
-    var roomName = "tmp_room";
-    socket.currentRoom = roomName;
-    socket.join(roomName);
+    //var roomName = "tmp_room";
+    //socket.currentRoom = roomName;
+    //socket.join(roomName);
     /*^^^^^^^^^^^^^^^^^^^^^^^*/
 
     // request client current url on connection to assign the room
-    socket.emit('url req', "url request");
+    // socket.emit('url req', "url request");
 
     socket.on('url res', function(url) {
       //#### add url decode in the future
       var room = url;
       socket.room = room;
       socket.join(room);
-      console.log("new user: <"+socket.username+ ">join room <"+url+">");
+      console.log("new user: <" + socket.username + ">join room <" + url + ">");
       io.to(room).emit('new member', {
-        username : socket.username
+        username: socket.username
       });
     });
 
 
     // get new username
     socket.on('new user', function(username) {
-      console.log("newUser: "+username);
+      console.log("newUser: " + username);
       socket.username = username;
     });
 
@@ -45,7 +45,7 @@ module.exports = function(io) {
     socket.on('new message', function(data) {
       console.log("user: " + socket.username + " message: " + data); // log it to the Node.JS output
       // We tell the client to execute 'new message'
-      var room = socket.currentRoom;
+      var room = socket.room;
 
       io.to(room).emit('new message', {
         username: socket.username,
@@ -57,8 +57,8 @@ module.exports = function(io) {
     socket.on('disconnect', function() {
       var room = socket.room;
       var username = socket.username;
-      io.to(socket.currentRoom).emit('member left', {
-        username: socket.username
+      io.to(room).emit('member left', {
+        username: username
       });
     });
 
