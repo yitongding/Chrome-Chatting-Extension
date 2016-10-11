@@ -25,13 +25,13 @@ module.exports = function(io) {
     io.to(room).emit('new member', {
       username: socket.username
     });
-    console.log("new user: <" + socket.username + ">join room <" + url + ">");
+    console.log("new user: <" + socket.username + ">join room <" + room + ">");
 
     socket.on('new message', function (data) {
       socket.username = "tmp";
-      console.log("user: "+socket.username+ " message: "+data); // log it to the Node.JS output
+      console.log("user <"+socket.username+ "> message <"+data+"> in room <"+socket.room+">"); // log it to the Node.JS output
       // We tell the client to execute 'new message'
-      var room = socket.currentRoom;
+      var room = socket.room;
 
       io.to(room).emit('new message', {
         username: socket.username,
