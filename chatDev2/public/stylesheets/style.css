@@ -1,0 +1,155 @@
+.navbar {
+  margin-bottom: 0;
+  border-radius: 0;
+}
+
+/* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+/*.row.content {height: 1500px}
+ *
+ */* Set gray background color and 100% height */
+.sidenav {
+  background-color: rgba(0,0,0,1);
+  height: 100%;roomName
+}
+/* Set black background color, white text and some padding */
+footer {
+  background-color: rgba(0,0,0,1);
+  color: white;
+  padding: 15px;
+}
+
+/* On small screens, set height to 'auto' for sidenav and grid */
+@media screen and (max-width: 767px) {
+  .sidenav {
+    height: auto;
+    padding: 150px;
+  }
+  .row.content {height: auto;} 
+}
+
+#logout{
+	display: none;
+}
+
+/* Fix user-agent */
+
+* {
+  box-sizing: border-box;
+}
+
+
+html {
+  background: rgba(30%,0%,0%,1);
+  font-weight: 300;
+  
+  -webkit-font-smoothing: antialiased;
+}
+
+html, input {
+  
+  font-family:
+    "HelveticaNeue-Light",
+    "Helvetica Neue Light",
+    "Helvetica Neue",
+    Helvetica,
+    Arial,
+    "Lucida Grande",
+    sans-serif;
+}
+
+html, body {
+  
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: rgba(30%,0%,0%,0.0);
+  color:white;
+}
+li {    
+    color: white;
+    border-radius: 25px;
+    padding-top: 2px;
+    padding-right: 2px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    background: rgba(0,0,0,0.1);
+    width: 100%;
+}
+
+ul {
+  list-style: none;
+  word-wrap: break-word;
+}
+
+
+/* Font */
+
+.messages {
+  font-size:150%;
+}
+
+.inputMessage {
+  font-size: 100%;
+}
+
+.log {
+  color: white;
+  font-size: 70%;
+  margin: 5px;
+  text-align: center;
+}
+
+/* Messages */
+.chatArea {
+  background: rgba(30%,0%,0%,0.0);
+  height: 500px;
+  padding-bottom: 60px;
+}
+
+
+.messages {
+  height: 100%;
+  margin: 0;
+  overflow-y: scroll;
+  padding: 10px 20px 10px 20px;
+}
+
+.message.typing .messageBody {
+  color: white;
+}
+
+.username {
+  float: left;
+  font-weight: 700;
+  overflow: hidden;
+  padding-right: 15px;
+  text-align: right;
+}
+
+/* Input */
+
+.inputMessage {
+  bottom: 0px;
+  border-radius: 25px;
+  background: rgba(0,0,0,0.1);
+  border: 5px solid #000;
+  height: 60px;
+  left: 0;
+  outline: none;
+  padding-left: 10px;
+  right: 0;
+  width: 60%;
+  bottom:0;
+}
+
+.messageSubmit {
+  bottom: 0px;
+  border-radius: 25px;
+  border: 5px solid #000;
+  height: 60px;
+  left: 0;
+  outline: none;
+  padding-left: 10px;
+  right: 0;
+  width: 20%;
+}

@@ -1,8 +1,9 @@
 //var socket = io('//localhost:3000');
 var socket = io();
-
+var $window = $(window);
 var $inputMessage = $('.inputMessage'); // Input message input box
 var $messages = $('.messages'); // Messages area
+var username = 'tmp';
 /* help funcitons*/
 
 function cleanInput (input) {
@@ -44,6 +45,12 @@ function addMessageElement (el, options) {
 $('.messageSubmit').click(function(){
   sendMessage();
 });
+
+$window.keydown(function(event) { 
+// When the client hits ENTER on their keyboard 
+if (event.which === 13) { if (username) { sendMessage(); } else { 
+//#### setUsername(); 
+} } });
 
 socket.on('new message', function (data) {
   addChatMessage(data);
