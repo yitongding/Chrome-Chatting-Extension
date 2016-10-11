@@ -1,22 +1,39 @@
+// {
+// 	"name": "BSC",
+// 	"manifest_version": 2,
+// 	"description": "BSC",
+// 	"version": "3.3",
+// 	"background": {
+// 		"page": "background.html"
+// 	},
+// 	"page_action": {
+// 		"default_icon": "icon.png",
+// 		"default_title": "BSC"
+// 	},
+// 	"content_scripts": [{
+// 		"matches": ["<all_urls>"],
+// 		"js": ["script.js"]
+// 	}],
+// 	"permissions": [
+// 		"tabs"
+// 	]
+// }
+
 {
-	"name": "BSC",
+	"name": "popup_chat",
 	"manifest_version": 2,
-	"description": "BSC",
-	"version": "3.3",
-	"background": {
-		"page": "background.html"
+	"description": "popup_chat",
+	"version": "1.0",
+	"browser_action": {
+		"default_popup": "popup.html"
 	},
-	"page_action": {
-		"default_icon": "icon.png",
-		"default_title": "BSC"
-	},
-	"content_scripts": [
-		{
-			"matches": ["<all_urls>"],
-			"js": ["script.js"]
-		}
-	],
+	"content_scripts": [{
+		"matches": ["<all_urls>"],
+		"js": ["jquery.js","script.js"]
+	}],
 	"permissions": [
-		"tabs"
+		"tabs",
+		"activeTab",
+    	"declarativeContent"
 	]
 }

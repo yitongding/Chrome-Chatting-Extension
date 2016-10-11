@@ -3,17 +3,26 @@ function handleMessage(
 	sender, sendResponse
 	) {
 	if (request.type == "url")
-		toggleSidebar(request.url);
+		toggleSidebar(request.data.url);
+	if (request.type == "showChat")
+		toggleSidebar(request.data.url);
 }
 
 chrome.extension.onMessage.addListener(handleMessage);
 
 var sidebarOpen = false;
+var sidebarVisible = false;
 function toggleSidebar(url) {
 	if(sidebarOpen) {
-		var el = document.getElementById('mySidebar');
-		el.parentNode.removeChild(el);
-		sidebarOpen = false;
+		// var el = document.getElementById('mySidebar');
+		// el.parentNode.removeChild(el);
+		// sidebarOpen = false;
+		if (sidebarVisible) {
+			jQuery('#mySidebar').hide();
+		} else {
+			jQuery('#mySidebar').show();
+		}
+		sidebarVisible = !sidebarVisible;
 	}
 	else {
 		var sidebar = document.createElement('div');
@@ -32,5 +41,6 @@ function toggleSidebar(url) {
 		";
 		document.body.appendChild(sidebar);
 		sidebarOpen = true;
+		sidebarVisible = true;
 	}
 }
