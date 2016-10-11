@@ -1,20 +1,31 @@
 module.exports = function(io) {
   var app = require('express');
   var router = app.Router();
+  var url = null;
 
   router.get('/', function(req, res, next) {
-	res.render('index', { title: 'Express' });});
+    url = req.param('url');
+    res.render('index', {
+      title: 'Chat'
+    });
+  });
 
-  io.sockets.on('connection', function(socket) { 
-    socket.emit("socketToMe", "connection established");
-    
+  io.sockets.on('connection', function(socket) {
+    // connection test
+    socket.emit('socketToMe', "connection established");
 
-    // tmp room solution, change to URL later
-    /*************************/ 
-    var roomName = "tmp_room";
-    socket.currentRoom = roomName;
-    socket.join(roomName);
-    /*^^^^^^^^^^^^^^^^^^^^^^^*/
+    socket.username = "tmp";
+    // add user to room based on url
+    var room = url;
+    if (!room) {
+      room = "54.213.44.54:3000";
+    }
+    socket.room = room;
+    socket.join(room);
+    io.to(room).emit('new member', {
+      username: socket.username
+    });
+    console.log("new user: <" + socket.username + ">join room <" + url + ">");
 
     socket.on('new message', function (data) {
       socket.username = "tmp";
