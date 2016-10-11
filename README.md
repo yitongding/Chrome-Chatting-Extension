@@ -1,11 +1,12 @@
 # Chrome-Chatting-Extension
 This is a chrome extension allowed people viewing the same webpage to chat with each other.
 
-##About the three folders
+##About the folders
 ###Back-ends
 - "chatDemo" have the demo chat website from socket.io
 - "chatHelp" used to test funcitions or prototypes
 - "chatDev"  used to implant the real back-end of the extension
+- "DM" is the Chrome extension prototype
 
 ##How to Run
 ###Back-ends
