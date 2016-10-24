@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>History</title>
+  </head>
+  <body>
+  	<ul>
+  		<% messages.forEach(function(message) { %>
+  			<li> <%= message.time> - <%= message.username %> : <%= message.message %></li>
+  		<% }); %>
+  	</ul>
+  </body>
+</html>

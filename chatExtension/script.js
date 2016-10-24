@@ -3,16 +3,18 @@ function handleMessage(
 	sender, sendResponse
 	) {
 	if (request.type == "url")
-		toggleSidebar(request.data.url);
+		toggleSidebar(request.data);
 	if (request.type == "showChat")
-		toggleSidebar(request.data.url);
+		toggleSidebar(request.data);
 }
 
 chrome.extension.onMessage.addListener(handleMessage);
 
 var sidebarOpen = false;
 var sidebarVisible = false;
-function toggleSidebar(url) {
+function toggleSidebar(data) {
+	var url = data.url;
+	var username = data.username;
 	if(sidebarOpen) {
 		// var el = document.getElementById('mySidebar');
 		// el.parentNode.removeChild(el);
@@ -27,7 +29,7 @@ function toggleSidebar(url) {
 	else {
 		var sidebar = document.createElement('div');
 		sidebar.id = "mySidebar";
-		sidebar.innerHTML = `<iframe width="100%" height="100%" src="http://54.213.44.54:3000?url='`+encodeURIComponent(url)+`'" frameborder="0" allowfullscreen></iframe>`;
+		sidebar.innerHTML = `<iframe width="100%" height="100%" src="http://54.213.44.54:3000?url='`+encodeURIComponent(url)+`'&username='`+encodeURIComponent(username)+`'" frameborder="0" allowfullscreen></iframe>`;
 		sidebar.style.cssText = "\
 			position:fixed;\
 			color:rgb(255,255,255);\

@@ -1,55 +1,107 @@
 module.exports = function(io) {
   var app = require('express');
   var router = app.Router();
+
+  var mongoose = require('mongoose');
+  var Room = mongoose.model('Room');
+  var Message = mongoose.model('Message');
+
   var url = null;
+  var username = 'tmp';
 
   router.get('/', function(req, res, next) {
     url = req.param('url');
+    username = req.param('username');
     res.render('index', {
-      title: 'Chat'
+      historyLink: url
     });
   });
 
   io.sockets.on('connection', function(socket) {
     // connection test
-    socket.emit('socketToMe', "connection established");
+    socket.emit('established', "connection established");
 
-    socket.username = "tmp";
+    // set username to the socket
+    if (!username) {
+      username = 'anonymous';
+    }
+    socket.username = username;
+
+
     // add user to room based on url
     var room = url;
+    if (!room) {
+      room = "54.213.44.54:3000";
+    }
     socket.room = room;
     socket.join(room);
-    io.to(room).emit('new member', {
-      username: socket.username
-    });
-    console.log("new user: <" + socket.username + ">join room <" + url + ">");
 
-
-    // get new username
-    socket.on('new user', function(username) {
-      console.log("newUser: " + username);
-      socket.username = username;
+    // update old room or insert new room to DB
+    var newRoomObj = new Room({
+      name: room,
+      host: socket.username
     });
 
-    // When new message come in
-    socket.on('new message', function(data) {
-      console.log("user: " + socket.username + " message: " + data); // log it to the Node.JS output
-      // We tell the client to execute 'new message'
-      var room = socket.room;
+    var roomObj = null;
+    Room.update({
+      name: room
+    }, newRoomObj, {
+      upsert: true,
+      new: true
+    }, function(err, newRoom) {
+      if (err) console.log(err);
+      roomObj = newRoom;
+      // sent last 10 chat history to the new user
+      socket.emit("last ten history", roomObj.comment.slice(-10););
+    });
 
-      io.to(room).emit('new message', {
+    console.log("new user: <" + socket.username + ">join room <" + room + ">");
+
+
+
+    socket.on('new message', function(message) {
+      // log it to the Node.JS output
+      console.log("user <" + socket.username + "> message <" + message + "> in room <" + socket.room + ">");
+
+      // save message to DB
+      var messageObj = new Message({
         username: socket.username,
-        message: data
+        message: message,
+        room: roomObj
       });
+
+      messageObj.save(function(err) {
+        if (err) console.log(err);
+        roomObj.messages.push(messageObj);
+        roomObj.save(function(err, roomObj) {
+          if (err) console.log(err);
+
+          // broadcast message to the room
+          io.to(socket.room).emit('new message', {
+            username: socket.username,
+            message: message,
+            id: messageObj._id
+          });
+
+        });
+      });
+
     });
 
 
-    socket.on('disconnect', function() {
-      var room = socket.room;
-      var username = socket.username;
-      io.to(room).emit('member left', {
-        username: username
-      });
+
+    socket.on('upvotes', function(data) {
+
+      Message.findById(
+        data.id,
+        function(err, message) {
+          if (err) console.log(err);
+          messgae.upvote(function() {
+            socket.emit('upvote success');
+            io.to(socket.room).emit('upvote', data);
+          });
+        });
+
     });
 
   });
