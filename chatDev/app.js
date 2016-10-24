@@ -6,8 +6,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var mongoose = require('mongoose');
-require('./module/Room');
-require('./module/Message');
+require('./modules/Room');
+require('./modules/Message');
 mongoose.connect('mongodb://localhost:27017/chromeChat');
 
 var app = express();

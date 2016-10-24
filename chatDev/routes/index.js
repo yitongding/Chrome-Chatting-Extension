@@ -37,13 +37,13 @@ module.exports = function(io) {
     socket.join(room);
 
     // update old room or insert new room to DB
-    var newRoomObj = new Room({
+    var newRoomObj = {
       name: room,
       host: socket.username
-    });
+    };
 
     var roomObj = null;
-    Room.update({
+    Room.findOneAndUpdate({
       name: room
     }, newRoomObj, {
       upsert: true,
@@ -52,7 +52,8 @@ module.exports = function(io) {
       if (err) console.log(err);
       roomObj = newRoom;
       // sent last 10 chat history to the new user
-      socket.emit("last ten history", roomObj.comment.slice(-10););
+      // console.log(roomObj);
+      socket.emit("last ten history", roomObj.messages.slice(-10));
     });
 
     console.log("new user: <" + socket.username + ">join room <" + room + ">");
