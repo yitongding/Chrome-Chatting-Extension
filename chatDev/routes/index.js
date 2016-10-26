@@ -48,7 +48,7 @@ module.exports = function(io) {
     }, newRoomObj, {
       upsert: true,
       new: true
-    }, function(err, newRoom) {
+    }).populate('messages').exec(function(err, newRoom) {
       if (err) console.log(err);
       roomObj = newRoom;
       // sent last 10 chat history to the new user
