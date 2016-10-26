@@ -8,11 +8,13 @@ module.exports = function() {
 
   router.get('/', function(req, res, next) {
     var name = req.param('room');
+    console.log("DB start");
     Room.findOne({name: name}).exec(function(err, room){
       if (err) {
         console.log(err);
         res.render('history', {messages: 'There is no message in this room'});
       } else {
+        console.log("history.ejs start to render");
         res.render('history', {messages : room.messages});
       }
     });
