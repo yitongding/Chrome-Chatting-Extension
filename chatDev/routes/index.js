@@ -91,7 +91,7 @@ module.exports = function(io) {
 
 
 
-    socket.on('upvotes', function(data) {
+    socket.on('upvote', function(data) {
 
       Message.findById(
         data.id,

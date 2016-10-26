@@ -59,3 +59,18 @@ socket.on('new message', function (data) {
 socket.on('established', function (data) {
   console.log(data);
 });
+
+socket.on('last ten history', function (data) {
+  data.forEach(function(message) {
+    addChatMessage(message);
+  });
+  var historyNotice = {
+    username: 'SYSTEM',
+    message: '*******ABOVE IS TEN CHATTING HISTORY*******'
+  };
+  addChatMessage(historyNotice);
+});
+
+socket.on('upvote', function(message) {
+
+});
