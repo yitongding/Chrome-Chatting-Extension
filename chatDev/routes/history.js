@@ -1,25 +1,24 @@
-module.exports = function() {
-  var app = require('express');
-  var router = app.Router();
+var express = require('express');
+var router = express.Router();
 
-  var mongoose = require('mongoose');
-  var Room = mongoose.model('Room');
-  var Message = mongoose.model('Message');
+var mongoose = require('mongoose');
+var Room = mongoose.model('Room');
+var Message = mongoose.model('Message');
 
-  router.get('/', function(req, res, next) {
-    var name = req.param('room');
-    console.log("DB start");
-    Room.findOne({name: name}).exec(function(err, room){
-      if (err) {
+/* GET users listing. */
+router.get('/:room', function(req, res, next) {
+  var ref = req.headers.referer;
+  console.log(ref);
+  var name = req.params.room;
+  Room.findOne({name: name}).populate('messages').exec(function(err, room){
+    if (err || !room) {
         console.log(err);
-        res.render('history', {messages: 'There is no message in this room'});
+        res.render('history', {messages: [{message : 'There is no message in this room'}], ref: ref});
       } else {
-        console.log("history.ejs start to render");
-        res.render('history', {messages : room.messages});
+        res.render('history', {messages : room.messages, ref: ref});
       }
     });
-    
-  });
+});
 
-  return router;
-};
+module.exports = router;
+
