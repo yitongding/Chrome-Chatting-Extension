@@ -89,7 +89,13 @@ module.exports = function(io) {
 
     });
 
-
+    function findTopFive(message) {
+      Message.find({room: message.room})
+        .sort('-upvote')
+        .exec(function(err, messages) {
+          io.to(socket.room).emit('top five', messages.slice(0,5));
+        });
+    }
 
     socket.on('upvote', function(data) {
 
@@ -98,8 +104,9 @@ module.exports = function(io) {
         function(err, message) {
           if (err) console.log(err);
           messgae.upvote(function() {
-            socket.emit('upvote success');
-            io.to(socket.room).emit('upvote', data);
+            console.log('user <' + socket.username + '> vote on <' + data.id + '>');
+            io.to(socket.room).emit('upvote', {id: data.id}});
+            findTopFive(message);
           });
         });
 

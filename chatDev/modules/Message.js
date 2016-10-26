@@ -3,10 +3,6 @@ var mongoose = require('mongoose');
 var MessageSchema = new mongoose.Schema({
   username: String,
   message: String,
-  time: {
-    type: Date,
-    default: Date.now
-  },
   upvotes: {
     type: Number,
     default: 0
@@ -14,7 +10,14 @@ var MessageSchema = new mongoose.Schema({
   room: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Room'
-  }]
+  }],
+  expireAt: {
+    type: Date,
+    default: Date.now,
+    expires: '7d'
+  }
+}, {
+  timestamps: true
 });
 
 MessageSchema.methods.upvote = function(callback) {
