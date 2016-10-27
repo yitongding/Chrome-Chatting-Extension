@@ -98,14 +98,14 @@ module.exports = function(io) {
     }
 
     socket.on('upvote', function(data) {
-
+      console.log(data);
       Message.findById(
-        data.id,
+        data,
         function(err, message) {
           if (err) console.log(err);
-          messgae.upvote(function() {
-            console.log('user <' + socket.username + '> vote on <' + data.id + '>');
-            io.to(socket.room).emit('upvote', {id: data.id}});
+          message.upvote(function() {
+            console.log('user <' + socket.username + '> vote on <' + data + '>');
+            io.to(socket.room).emit('upvote', message);
             findTopFive(message);
           });
         });

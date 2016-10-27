@@ -23,8 +23,10 @@ function sendMessage() {
 }
 
 function voteBtnListener() {
-  if (!this.val()) {
-    this.val(true);
+  //var voted = this.value;
+  if (this.value === "false") {
+    this.value = true;
+    $(this).attr('disable', true);
     socket.emit('upvote', this.id);
   }
 }
@@ -36,14 +38,17 @@ function addChatMessage(data, options) {
   var $messageBodyDiv = $('<span class="messageBody">')
     .text(data.message);
   var $voteBtn = $('<button class="voteBtn">')
-    .id(data.id)
+    .attr("id", data._id)
     .text('Like')
     .val(false);
   var $voteCount = $('<span class="voteCount">')
-    .id(data.id)
-    .val(data.upvotes)
+    .attr("id", data._id)
     .text(data.upvotes);
-  $voteBtn.click = voteBtnListener;
+  //$voteBtn.onclick = voteBtnListener;
+  if (data.username === "SYSTEM") {
+    $voteCount = null;
+    $voteBtn = null;
+  }
   var $messageDiv = $('<li class="message"/>')
     .data('username', data.username)
     .append($usernameDiv, $messageBodyDiv, $voteCount, $voteBtn);
@@ -57,6 +62,8 @@ function addMessageElement(el, options) {
   $messages.append($el);
   $messages[0].scrollTop = $messages[0].scrollHeight;
 }
+
+$('.messages').on('click', '.voteBtn', voteBtnListener);
 
 $('.messageSubmit').click(function() {
   sendMessage();
@@ -94,6 +101,5 @@ socket.on('last ten history', function(data) {
 });
 
 socket.on('upvote', function(message) {
-  $('.voteCount #'+message.id).val( $('.voteCount #'+message.id).val() + 1);
-  $('.voteCount #'+message.id).text(('.voteCount #'+message.id).val());
+  $('.voteCount#'+message._id).text(message.upvotes);
 });
