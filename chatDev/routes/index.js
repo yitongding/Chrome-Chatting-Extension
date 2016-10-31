@@ -81,7 +81,7 @@ module.exports = function(io) {
           io.to(socket.room).emit('new message', {
             username: socket.username,
             message: message,
-            id: messageObj._id
+            _id: messageObj._id
           });
 
         });

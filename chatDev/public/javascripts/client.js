@@ -3,6 +3,7 @@ var socket = io();
 var $window = $(window);
 var $inputMessage = $('.inputMessage'); // Input message input box
 var $messages = $('.messages'); // Messages area
+var $topFives = $('.topFives');
 var username = 'tmp';
 /* help funcitons*/
 
@@ -45,22 +46,32 @@ function addChatMessage(data, options) {
     .attr("id", data._id)
     .text(data.upvotes);
   //$voteBtn.onclick = voteBtnListener;
-  if (data.username === "SYSTEM") {
+  if (options === "SYSTEM") {
     $voteCount = null;
     $voteBtn = null;
   }
-  var $messageDiv = $('<li class="message"/>')
-    .data('username', data.username)
-    .append($usernameDiv, $messageBodyDiv, $voteCount, $voteBtn);
-
+  if (options === "topFive") {
+    $messageBodyDiv.removeClass('messageBody').addClass('topFiveBody');
+    var $topFiveDiv = $('<li class="topFive"/>')
+      .data('username', data.username)
+      .append($usernameDiv, $messageBodyDiv, $voteCount, $voteBtn);
+  } else {
+    var $messageDiv = $('<li class="message"/>')
+      .data('username', data.username)
+      .append($usernameDiv, $messageBodyDiv, $voteCount, $voteBtn);
+  }
   addMessageElement($messageDiv, options);
 }
 
 // Add any element to the Message window
 function addMessageElement(el, options) {
   var $el = $(el);
-  $messages.append($el);
-  $messages[0].scrollTop = $messages[0].scrollHeight;
+  if (options === 'topFive') {
+    $topFives.append($el);
+  } else {
+    $messages.append($el);
+    $messages[0].scrollTop = $messages[0].scrollHeight;
+  }
 }
 
 $('.messages').on('click', '.voteBtn', voteBtnListener);
@@ -97,9 +108,15 @@ socket.on('last ten history', function(data) {
     username: 'SYSTEM',
     message: '*******ABOVE IS TEN CHATTING HISTORY*******'
   };
-  addChatMessage(historyNotice);
+  addChatMessage(historyNotice, "SYSTEM");
 });
 
 socket.on('upvote', function(message) {
-  $('.voteCount#'+message._id).text(message.upvotes);
+  $('.voteCount#' + message._id).text(message.upvotes);
+});
+
+socket.on('top five', function(messages) {
+  messages.forEach(function(message) {
+    addChatMessage(message, "topFive");
+  });
 });
