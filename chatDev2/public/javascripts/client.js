@@ -66,3 +66,5 @@ socket.on('new message', function (data) {
 socket.on('socketToMe', function (data) {
   console.log(data);
 });
+
+

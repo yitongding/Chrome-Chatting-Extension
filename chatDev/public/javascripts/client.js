@@ -4,8 +4,10 @@ var $window = $(window);
 var $inputMessage = $('.inputMessage'); // Input message input box
 var $messages = $('.messages'); // Messages area
 var $topFives = $('.topFives');
-var username = 'tmp';
+var username = "vpm";
 /* help funcitons*/
+
+
 
 function cleanInput(input) {
   return $('<div/>').text(input).text();
