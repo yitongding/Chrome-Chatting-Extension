@@ -52,7 +52,7 @@ function addChatMessage(data, options) {
   }
   if (options === "topFive") {
     $messageBodyDiv.removeClass('messageBody').addClass('topFiveBody');
-    var $topFiveDiv = $('<li class="topFive"/>')
+    var $messageDiv = $('<li class="topFive"/>')
       .data('username', data.username)
       .append($usernameDiv, $messageBodyDiv, $voteCount, $voteBtn);
   } else {
@@ -112,11 +112,12 @@ socket.on('last ten history', function(data) {
 });
 
 socket.on('upvote', function(message) {
-  $('.voteCount#' + message._id).text(message.upvotes);
+  $('.voteCount#' + message._id).each(function(){$(this).text(message.upvotes);});
 });
 
 socket.on('top five', function(messages) {
-  messages.forEach(function(message) {
+    $topFives.empty();
+    messages.forEach(function(message) {
     addChatMessage(message, "topFive");
   });
 });

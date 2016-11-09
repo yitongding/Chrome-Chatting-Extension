@@ -54,6 +54,7 @@ module.exports = function(io) {
       // sent last 10 chat history to the new user
       // console.log(roomObj);
       socket.emit("last ten history", roomObj.messages.slice(-10));
+      findTopFive(newRoom);
     });
 
     console.log("new user: <" + socket.username + ">join room <" + room + ">");
@@ -90,16 +91,16 @@ module.exports = function(io) {
 
     });
 
-    function findTopFive(message) {
-      Message.find({room: message.room})
-        .sort('-upvote')
+    function findTopFive(room) {
+      Message.find({room: room})
+        .sort('-upvotes')
         .exec(function(err, messages) {
           io.to(socket.room).emit('top five', messages.slice(0,5));
         });
     }
 
     socket.on('upvote', function(data) {
-      console.log(data);
+      //console.log(data);
       Message.findById(
         data,
         function(err, message) {
@@ -107,7 +108,7 @@ module.exports = function(io) {
           message.upvote(function() {
             console.log('user <' + socket.username + '> vote on <' + data + '>');
             io.to(socket.room).emit('upvote', message);
-            findTopFive(message);
+            findTopFive(message.room);
           });
         });
 

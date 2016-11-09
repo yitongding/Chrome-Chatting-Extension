@@ -6,6 +6,8 @@ var $messages = $('.messages'); // Messages area
 var username = 'tmp';
 /* help funcitons*/
 
+
+
 function cleanInput (input) {
   return $('<div/>').text(input).text();
 }
@@ -45,6 +47,11 @@ function addMessageElement (el, options) {
 $('.messageSubmit').click(function(){
   sendMessage();
 });
+
+$('.download').click(function(){
+  sendMessage();  
+});
+
 
 $window.keydown(function(event) { 
 // When the client hits ENTER on their keyboard 
