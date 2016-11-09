@@ -4,7 +4,9 @@
     <% include ./partials/head %>
 
     <title>Online Chat</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' /> 
+    <link href="emoji/css/nanoscroller.css" rel="stylesheet">
+    <link href="emoji/css/emoji.css" rel="stylesheet">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
 
  </head>
 
@@ -20,15 +22,22 @@
             <ul class="topFives"></ul> 
             <ul class="messages"></ul>
           </div>
-          <input class="inputMessage" placeholder="Type here..."/>
+          <input class="inputMessage" data-emojiable="true" placeholder="Type here..."/>
           <!--<button class="messageSubmit">Send</button>-->
         </div>
         <div class="col-sm-2"></div>
       </div>
     </div>
+    <script src="emoji/js/nanoscroller.min.js"></script>
+    <script src="emoji/js/tether.min.js"></script>
+    <script src="emoji/js/config.js"></script>
+    <script src="emoji/js/util.js"></script>
+    <script src="emoji/js/jquery.emojiarea.js"></script>
+    <script src="emoji/js/emoji-picker.js"></script> 
 
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="/javascripts/client.js"></script> 
   </body>
 
-  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-  <script type="text/javascript" src="/javascripts/client.js"></script> 
+  
 </html>
