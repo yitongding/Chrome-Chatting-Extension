@@ -28,7 +28,19 @@ $(function() {
 
 
 		sendMessage('getStatus', {}, function(status) {
-
+			
+			if (status.sidebarOpen) {
+				$('.connectBtn').text("Disconncet");
+				$('.usernameSetInput').val(status.username);
+				if (status.sidebarVisible) {
+					$('.visibleBtn').text("Hide Chat").removeAttr("disabled");
+					$('.usernameSetBtn').removeAttr("disabled");
+				} else {
+					$('.visibleBtn').text("Show Chat").removeAttr("disabled");
+					$('.usernameSetBtn').removeAttr("disabled");
+				}
+			} 
+			
 			$('.connectBtn').click(function() {
 				var username = $('.usernameSetInput').val();
 				sidebarOpen = !sidebarOpen;

@@ -2,20 +2,27 @@ function handleMessage(
 	request, 
 	sender, sendResponse
 	) {
-	if (request.type == "connect")
+	if (request.type == "connect") {
+		local_username = request.data.username;
 		toggleSidebar(request.data, "connection");
+	}
 	if (request.type == "showChat")
 		toggleSidebar(null, "visibility");
-	if (request.type == "setName")
+	if (request.type == "setName") {
+		local_username = request.data.username;
 		toggleSidebar(request.data, "setName");
+	}
 	if (request.type == "changeMode")
 		toggleSidebar(request.data, "changeMode");
+	if (request.type == "getStatus")
+		sendResponse({sidebarOpen: sidebarOpen, sidebarVisible: sidebarVisible, username: local_username});
 }
 
 chrome.extension.onMessage.addListener(handleMessage);
 
 var sidebarOpen = false;
 var sidebarVisible = false;
+var local_username = "anonymous";
 
 function createSideBar(url, username, option) {
 	var sidebar = document.createElement('div');
