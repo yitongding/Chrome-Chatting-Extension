@@ -56,7 +56,7 @@ function addChatMessage(data, options) {
     $messageBodyDiv.removeClass('messageBody').addClass('topFiveMessage');
     var $messageDiv = $('<li class="topFiveDiv"/>')
       .data('username', data.username)
-      .append($usernameDiv, $messageBodyDiv);
+      .append($usernameDiv, $messageBodyDiv, $voteBtn, $voteCount);
   } else {
     var $messageDiv = $('<li class="message"/>')
       .data('username', data.username)
@@ -114,7 +114,7 @@ socket.on('last ten history', function(data) {
 });
 
 socket.on('upvote', function(message) {
-  $('.voteCount#' + message._id).each(function(){$(this).text(message.upvotes);});
+  $('span#'+message._id+'.voteCount').text(message.upvotes);
 });
 
 socket.on('top five', function(messages) {

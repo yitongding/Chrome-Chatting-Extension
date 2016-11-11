@@ -2,7 +2,7 @@ module.exports = function(io) {
   var app = require('express');
   var router = app.Router();
   var url = null;
-
+  
   router.get('/', function(req, res, next) {
     url = req.param('url');
     res.render('index', {
@@ -10,10 +10,11 @@ module.exports = function(io) {
     });
   });
 
+
+
   io.sockets.on('connection', function(socket) {
     // connection test
     socket.emit('socketToMe', "connection established");
-
     socket.username = "tmp";
     // add user to room based on url
     var room = url;
@@ -28,7 +29,7 @@ module.exports = function(io) {
     console.log("new user: <" + socket.username + ">join room <" + room + ">");
 
     socket.on('new message', function (data) {
-      socket.username = "tmp";
+      //socket.username = "tmp";
       console.log("user <"+socket.username+ "> message <"+data+"> in room <"+socket.room+">"); // log it to the Node.JS output
       // We tell the client to execute 'new message'
       var room = socket.room;
