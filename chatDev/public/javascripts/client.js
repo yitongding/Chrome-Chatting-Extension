@@ -118,7 +118,7 @@ socket.on('upvote', function(message) {
 });
 
 socket.on('top five', function(messages) {
-    $topFives.empty();
+    $topFive.empty();
     messages.forEach(function(message) {
     addChatMessage(message, "topFive");
   });
