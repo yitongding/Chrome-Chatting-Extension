@@ -3,7 +3,7 @@ var socket = io();
 var $window = $(window);
 var $inputMessage = $('.inputMessage'); // Input message input box
 var $messages = $('.messages'); // Messages area
-var $topFives = $('.topFives');
+var $topFive = $('.topFive');
 var username = "vpm";
 /* help funcitons*/
 
@@ -53,14 +53,14 @@ function addChatMessage(data, options) {
     $voteBtn = null;
   }
   if (options === "topFive") {
-    $messageBodyDiv.removeClass('messageBody').addClass('topFiveBody');
-    var $messageDiv = $('<li class="topFive"/>')
+    $messageBodyDiv.removeClass('messageBody').addClass('topFiveMessage');
+    var $messageDiv = $('<li class="topFiveDiv"/>')
       .data('username', data.username)
-      .append($usernameDiv, $messageBodyDiv, $voteCount, $voteBtn);
+      .append($usernameDiv, $messageBodyDiv);
   } else {
     var $messageDiv = $('<li class="message"/>')
       .data('username', data.username)
-      .append($usernameDiv, $messageBodyDiv, $voteCount, $voteBtn);
+      .append($usernameDiv, $messageBodyDiv, $voteBtn, $voteCount);
   }
   addMessageElement($messageDiv, options);
 }
@@ -69,7 +69,7 @@ function addChatMessage(data, options) {
 function addMessageElement(el, options) {
   var $el = $(el);
   if (options === 'topFive') {
-    $topFives.append($el);
+    $topFive.append($el);
   } else {
     $messages.append($el);
     $messages[0].scrollTop = $messages[0].scrollHeight;

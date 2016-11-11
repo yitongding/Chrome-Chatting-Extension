@@ -13,7 +13,7 @@ module.exports = function(io) {
     url = req.param('url');
     username = req.param('username');
     res.render('index', {
-      historyLink: url
+      historyLink: encodeURIComponent(url)
     });
   });
 

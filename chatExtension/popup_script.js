@@ -8,7 +8,8 @@ console.log('popup_script.js starting!');
 
 'use strict';
 $(function() {
-	var chatVisible = true;
+	var sidebarOpen = false;
+	var sidebarVisible = false;
 
 	chrome.tabs.query({
 		active: true,
@@ -28,20 +29,56 @@ $(function() {
 
 		sendMessage('getStatus', {}, function(status) {
 
-			$('.connetBtn').click(function() {
-        var username = $('.usernameSetInput').val();
-				chatVisible = !chatVisible;
-				sendMessage('url', {
+			$('.connectBtn').click(function() {
+				var username = $('.usernameSetInput').val();
+				sidebarOpen = !sidebarOpen;
+				sidebarVisible = !sidebarVisible;
+				sendMessage('connect', {
 					url: tabs[0].url,
-          username: username
+					username: username
 				}, null);
+				if (sidebarOpen) {
+					$('.connectBtn').text("Disconncet");
+					$('.visibleBtn').text("Hide Chat").removeAttr("disabled");
+					$('.usernameSetBtn').removeAttr("disabled");
+				}
+				else {
+					$('.connectBtn').text("Conncet");
+					$('.visibleBtn').text("Show Chat").attr("disabled", true);
+					$('.usernameSetBtn').attr("disabled", true);
+				}
+					
 			});
 
 			$('.visibleBtn').click(function() {
-				chatVisible = !chatVisible;
+				sidebarVisible = !sidebarVisible;
 				sendMessage('showChat', {
 					url: tabs[0].url
 				}), null;
+				if (sidebarVisible) {
+					$('.visibleBtn').text("Hide Chat");
+				} else {
+					$('.visibleBtn').text("Show Chat");
+				}
+			});
+			
+			$('.usernameSetBtn').click(function() {
+				var username = $('.usernameSetInput').val();
+				sidebarOpen = true;
+				sidebarVisible = true;
+				$('.visibleBtn').text("Hide Chat").removeAttr("disabled");
+				sendMessage('setName', {
+					url: tabs[0].url,
+					username: username
+				}, null);
+			});
+			
+			$('.bulletModeBtn').click(function() {
+				var username = $('.usernameSetInput').val();
+				sendMessage('changeMode', {
+					url: tabs[0].url,
+					username: username
+				}, null);
 			});
 
 		});
