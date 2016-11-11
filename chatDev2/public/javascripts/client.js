@@ -3,7 +3,7 @@ var socket = io();
 var $window = $(window);
 var $inputMessage = $('.inputMessage'); // Input message input box
 var $messages = $('.messages'); // Messages area
-var username = 'tmp';
+var username = "tmp";
 /* help funcitons*/
 
 
@@ -47,11 +47,6 @@ function addMessageElement (el, options) {
 $('.messageSubmit').click(function(){
   sendMessage();
 });
-
-$('.download').click(function(){
-  sendMessage();  
-});
-
 
 $window.keydown(function(event) { 
 // When the client hits ENTER on their keyboard 
