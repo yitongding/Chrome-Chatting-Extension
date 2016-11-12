@@ -7,10 +7,16 @@
     <link href="emoji/css/nanoscroller.css" rel="stylesheet">
     <link href="emoji/css/emoji.css" rel="stylesheet">
     <link rel='stylesheet' href='/stylesheets/style.css' />
-
+	
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
   </head>
 
   <body>
+	<script type="text/javascript" src="/javascripts/FBlogin.js"></script>
+	<div class="FBlogin">
+	  <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+	  </fb:login-button>
+	</div>
 	
 	<div class="chatArea">
 	  <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#topFive">Top Five Likes</button>
@@ -30,7 +36,6 @@
     <script src="emoji/js/jquery.emojiarea.js"></script>
     <script src="emoji/js/emoji-picker.js"></script> 
 
-    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="/javascripts/client.js"></script> 
   </body>
 

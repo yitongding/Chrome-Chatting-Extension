@@ -26,7 +26,13 @@ module.exports = function(io) {
       username = 'anonymous';
     }
     socket.username = username;
-
+	
+	// If user login with FB, then replace username
+	socket.on("FBlogin", function(data) {
+	  username = data.name;
+	  socket.username = data.name;
+	  socket.FBid = data.id;
+	});
 
     // add user to room based on url
     var room = url;
