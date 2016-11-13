@@ -27,8 +27,8 @@ function sendMessage() {
 
 function voteBtnListener() {
   //var voted = this.value;
-  if (this.value === "false") {
-    this.value = true;
+  if ($(this).attr("clicked") == "false") {
+    $(this).attr("clicked", "true");
     $(this).attr('disable', true);
     socket.emit('upvote', this.id);
   }
@@ -40,10 +40,11 @@ function addChatMessage(data, options) {
     .text(data.username);
   var $messageBodyDiv = $('<span class="messageBody">')
     .text(data.message);
-  var $voteBtn = $('<button class="voteBtn">')
+  var $thumbs = $('<span class="glyphicon glyphicon-thumbs-up">');
+  var $voteBtn = $('<div class="voteBtn btn btn-default">')
     .attr("id", data._id)
-    .text('Like')
-    .val(false);
+    .attr("clicked", "false")
+    .append($thumbs);
   var $voteCount = $('<span class="voteCount">')
     .attr("id", data._id)
     .text(data.upvotes);
@@ -76,7 +77,7 @@ function addMessageElement(el, options) {
   }
 }
 
-$('.messages').on('click', '.voteBtn', voteBtnListener);
+$('.chatArea').on('click', '.voteBtn', voteBtnListener);
 
 $('.messageSubmit').click(function() {
   sendMessage();
