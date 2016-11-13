@@ -42,9 +42,9 @@ function voteBtnListener() {
 
 
 function alertBuilder(text, id, options) {
-  var $alertClose.html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
+  var $alertClose = $('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
   var $alertDiv = $('<div class="alert" role="alert">')
-  var $alertText.text(text);
+  var $alertText = $('<span>').text(text);
   var $alertUndo = $('<a href="#" class="alertUndo alert-link">')
     .text('Undo')
     .attr('id', id);
@@ -66,8 +66,9 @@ function alertBuilder(text, id, options) {
 function blockBtnListener() {
   if ($(this).attr('clicked') == "true") return;
 
-  $(this).attr('clicked', "true");
-  $(this).attr('disabled', true);
+  $('#'+$(this).attr('id')+'.blockBtn')
+    .attr('clicked', "true")
+    .attr('disabled', true);
   blockList.push($(this).attr('id'));
 
   if ($(this).attr('id') != 0)
@@ -111,6 +112,7 @@ function addChatMessage(data, options) {
   if (options === "SYSTEM") {
     $voteCount = null;
     $voteBtn = null;
+    $blockBtn = null;
   }
 
   if (options === "topFive") {
@@ -148,8 +150,9 @@ $window.keydown(function(event) {
 
 $('.chatArea').on('click', '.voteBtn', voteBtnListener);
 
-
 $('.chatArea').on('click', '.blockBtn', blockBtnListener);
+
+$('.chatArea').on('click', '.alertUndo', blockUndoListener);
 
 // $('.messageSubmit').click(function() {
 //   sendMessage();

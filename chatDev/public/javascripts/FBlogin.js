@@ -16,16 +16,16 @@
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
-      testAPI();
+      successAPI();
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into this app.';
+      // document.getElementById('status').innerHTML = 'Please log ' + 'into this app.';
+      failAPI();
     } else {
       // The person is not logged into Facebook, so we're not sure if
       // they are logged into this app or not.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into Facebook.';
+      // document.getElementById('status').innerHTML = 'Please log ' + 'into Facebook.';
+      failAPI();
     }
   }
 
@@ -76,14 +76,20 @@
 
   // Here we run a very simple test of the Graph API after login is
   // successful.  See statusChangeCallback() for when this call is made.
-  function testAPI() {
+  function successAPI() {
     console.log('Welcome!  Fetching your information.... ');
     FB.api('/me', function(response) {
       console.log('Successful login for: ' + response.name);
-	  socket.emit("FBlogin", {name: response.name, id: response.id});
-    $('.inputMessage').removeAttr('disabled');
-    $('.FBloginNote').text('Hello, '+response.name);
+      socket.emit("FBlogin", {name: response.name, id: response.id});
+      $('.inputMessage').removeAttr('disabled');
+      $('.FBloginNote').text('Hello, '+response.name);
       //document.getElementById('status').innerHTML =
       //  'Thanks for logging in, ' + response.id + '!';
     });
+  }
+
+  function failAPI() {
+    console.log("Facebook login fail.");
+    $('.inputMessage').attr('disabled', true);
+    $('.FBloginNote').text("Please login to chat");
   }
