@@ -33,11 +33,33 @@ function sendMessage() {
 
 function voteBtnListener() {
   //var voted = this.value;
-  if ($(this).attr("clicked") == "false") {
-    $(this).attr("clicked", "true");
-    $(this).attr('disable', true);
+  if ($(this).attr('clicked') == "false") {
+    $(this).attr('clicked', "true");
+    $(this).attr('disabled', true);
     socket.emit('upvote', this.id);
   }
+}
+
+
+function alertBuilder(text, id, options) {
+  var $alertClose.html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
+  var $alertDiv = $('<div class="alert" role="alert">')
+  var $alertText.text(text);
+  var $alertUndo = $('<a href="#" class="alertUndo alert-link">')
+    .text('Undo')
+    .attr('id', id);
+  if (options == "success") {
+    $alertDiv.addClass('alert-success');
+  }
+  if (options == "warning") {
+    $alertDiv.addClass('alert-warning');
+  }
+  if (options == "undo") {
+    $alertDiv.addClass('alert-success');
+    $alertUndo = null;
+  }
+  $alertDiv.append($alertClose, $alertText, $alertUndo);
+  $('.alertContainner').empty().append($alertDiv);
 }
 
 
@@ -45,14 +67,20 @@ function blockBtnListener() {
   if ($(this).attr('clicked') == "true") return;
 
   $(this).attr('clicked', "true");
-  $(this).attr('disable', true);
-  var $alertClose.html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
-  var $alertText.html('<strong>Success!</strong> That user has been added to your block list.');
-  var $alertDiv = $('<div class="alert alert-success" role="alert">').
-    append($alertClose, $alertText);
+  $(this).attr('disabled', true);
+  blockList.push($(this).attr('id'));
 
-  $('.alertContainner').empty().append($alertDiv);
-  blockList.push($(this).attr("id"));
+  if ($(this).attr('id') != 0)
+    alertBuilder("That user has been added to your block list.", $(this).attr('id'), "success");
+  else 
+    alertBuilder("NOTE: all anonyous message has been blocked", $(this).attr('id'), "warning");
+}
+
+
+function blockUndoListener() {
+  blockList.pop();
+  $('#'+$(this).attr('id')+".blockBtn").removeAttr('disabled');
+  alertBuilder("Undo success.", null, "undo");
 }
 
 
