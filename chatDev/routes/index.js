@@ -7,11 +7,11 @@ module.exports = function(io) {
   var Message = mongoose.model('Message');
 
   var url = null;
-  var username = 'tmp';
+  // var username = 'tmp';
 
   router.get('/', function(req, res, next) {
     url = req.param('url');
-    username = req.param('username');
+    // username = req.param('username');
     res.render('index', {
       historyLink: encodeURIComponent(url)
     });
@@ -20,19 +20,6 @@ module.exports = function(io) {
   io.sockets.on('connection', function(socket) {
     // connection test
     socket.emit('established', "connection established");
-
-    // set username to the socket
-    if (!username) {
-      username = 'anonymous';
-    }
-    socket.username = username;
-	
-	// If user login with FB, then replace username
-	socket.on("FBlogin", function(data) {
-	  username = data.name;
-	  socket.username = data.name;
-	  socket.FBid = data.id;
-	});
 
     // add user to room based on url
     var room = url;
@@ -45,7 +32,7 @@ module.exports = function(io) {
     // update old room or insert new room to DB
     var newRoomObj = {
       name: room,
-      host: socket.username
+      host: null
     };
 
     var roomObj = null;
@@ -63,18 +50,36 @@ module.exports = function(io) {
       findTopFive(newRoom);
     });
 
-    console.log("new user: <" + socket.username + ">join room <" + room + ">");
+    console.log("new user: <" + socket.id + ">join room <" + room + ">");
 
+
+    // set username to the socket
+    // if (!username) {
+    //   username = 'anonymous';
+    // }
+    // socket.username = username;
+  
+    // If user login with FB, then replace username
+    socket.on("FBlogin", function(data) {
+      username = data.name;
+      socket.username = data.name;
+      socket.FBid = data.id;
+      console.log("user: <" + socket.id + "> login with FB <" + data.name + ">");
+    });
 
 
     socket.on('new message', function(message) {
       // log it to the Node.JS output
       console.log("user <" + socket.username + "> message <" + message + "> in room <" + socket.room + ">");
 
+      var text = message.text;
+      var username = (message.anonymous) ? "anonymous" : socket.username;
+      var FBid = (message.anonymous) ? 0 : socket.FBid;
+
       // save message to DB
       var messageObj = new Message({
-        username: socket.username,
-        message: message,
+        username: username,
+        message: text,
         room: roomObj
       });
 
@@ -86,10 +91,11 @@ module.exports = function(io) {
 
           // broadcast message to the room
           io.to(socket.room).emit('new message', {
-            username: socket.username,
-            message: message,
+            username: username,
+            message: text,
             _id: messageObj._id,
-            upvotes: 0
+            upvotes: 0,
+            FBid: FBid
           });
 
         });
