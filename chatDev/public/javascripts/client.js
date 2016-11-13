@@ -4,14 +4,9 @@ var $window = $(window);
 var $inputMessage = $('.inputMessage'); // Input message input box
 var $messages = $('.messages'); // Messages area
 var $topFive = $('.topFive');
-var username = "vpm";
+var blockList = [];
+
 /* help funcitons*/
-
-
-
-function cleanInput(input) {
-  return $('<div/>').text(input).text();
-}
 
 // Sends a chat message
 function sendMessage() {
@@ -35,6 +30,7 @@ function sendMessage() {
   }
 }
 
+
 function voteBtnListener() {
   //var voted = this.value;
   if ($(this).attr("clicked") == "false") {
@@ -44,25 +40,51 @@ function voteBtnListener() {
   }
 }
 
+
+function blockBtnListener() {
+  if ($(this).attr('clicked') == "true") return;
+
+  $(this).attr('clicked', "true");
+  $(this).attr('disable', true);
+  var $alertClose.html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>');
+  var $alertText.html('<strong>Success!</strong> That user has been added to your block list.');
+  var $alertDiv = $('<div class="alert alert-success" role="alert">').
+    append($alertClose, $alertText);
+
+  $('.alertContainner').empty().append($alertDiv);
+  blockList.push($(this).attr("id"));
+}
+
+
 // Add chat massage to the screen 
 function addChatMessage(data, options) {
   var $usernameDiv = $('<span class="username"/>')
     .text(data.username);
+
   var $messageBodyDiv = $('<span class="messageBody">')
     .text(data.message);
+
   var $thumbs = $('<span class="glyphicon glyphicon-thumbs-up">');
   var $voteBtn = $('<div class="voteBtn btn btn-default">')
     .attr("id", data._id)
     .attr("clicked", "false")
     .append($thumbs);
+
   var $voteCount = $('<span class="voteCount">')
     .attr("id", data._id)
     .text(data.upvotes);
-  //$voteBtn.onclick = voteBtnListener;
+
+  var $blockImg = $('<span class="glyphicon glyphicon-eye-close">');
+  var $blockBtn = $('<div class="blockBtn btn btn-default">')
+    .attr("id", data.FBid)
+    .attr("clicked", "false")
+    .append($blockImg);
+
   if (options === "SYSTEM") {
     $voteCount = null;
     $voteBtn = null;
   }
+
   if (options === "topFive") {
     $messageBodyDiv.removeClass('messageBody').addClass('topFiveMessage');
     var $messageDiv = $('<li class="topFiveDiv"/>')
@@ -71,8 +93,9 @@ function addChatMessage(data, options) {
   } else {
     var $messageDiv = $('<li class="message"/>')
       .data('username', data.username)
-      .append($usernameDiv, $messageBodyDiv, $voteBtn, $voteCount);
+      .append($usernameDiv, $messageBodyDiv, $voteBtn, $voteCount, $blockBtn);
   }
+
   addMessageElement($messageDiv, options);
 }
 
@@ -87,31 +110,34 @@ function addMessageElement(el, options) {
   }
 }
 
-$('.chatArea').on('click', '.voteBtn', voteBtnListener);
-
-$('.messageSubmit').click(function() {
-  sendMessage();
-});
-
-
 $window.keydown(function(event) {
   // When the client hits ENTER on their keyboard 
   if (event.which === 13) {
-    if (username) {
-      sendMessage();
-    } else {
-      //#### setUsername(); 
-    }
+    sendMessage();
   }
 });
 
-socket.on('new message', function(data) {
-  addChatMessage(data);
-});
+
+$('.chatArea').on('click', '.voteBtn', voteBtnListener);
+
+
+$('.chatArea').on('click', '.blockBtn', blockBtnListener);
+
+// $('.messageSubmit').click(function() {
+//   sendMessage();
+// });
 
 socket.on('established', function(data) {
   console.log(data);
 });
+
+
+socket.on('new message', function(data) {
+  if (blockList.indexOf(data.FBid) == -1) {
+    addChatMessage(data);
+  }
+});
+
 
 socket.on('last ten history', function(data) {
   data.forEach(function(message) {
@@ -124,9 +150,11 @@ socket.on('last ten history', function(data) {
   addChatMessage(historyNotice, "SYSTEM");
 });
 
+
 socket.on('upvote', function(message) {
   $('span#'+message._id+'.voteCount').text(message.upvotes);
 });
+
 
 socket.on('top five', function(messages) {
     $topFive.empty();
