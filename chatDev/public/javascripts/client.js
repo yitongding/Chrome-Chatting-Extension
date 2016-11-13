@@ -15,12 +15,22 @@ function cleanInput(input) {
 
 // Sends a chat message
 function sendMessage() {
-  var message = $inputMessage.val();
+  var text = $inputMessage.val();
   // Prevent markup from being injected into the message
-  if (message) {
+  if (text) {
     // if there is a non-empty message
     $inputMessage.val('');
-    // tell server to execute 'new message' and send along one parameter
+
+    if ($('.anonyousCheckbox').checked)
+      var anonyous = true;
+    else 
+      var anonyous = false;
+
+    var message = {
+      text: text,
+      anonyous: anonyous
+    }
+    
     socket.emit('new message', message);
   }
 }
