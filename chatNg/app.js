@@ -3,24 +3,25 @@ var express = require('express');
 var routes = require('./routes');
 var http = require('http');
 var path = require('path');
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+
+
 
 var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
-var mongoose = require('mongoose');
-require('./modules/Room');
-require('./modules/Message');
-mongoose.connect('mongodb://localhost:27017/chromeChat');
-
 app.set('port', process.env.VCAP_APP_PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-app.use(express.favicon());
-app.use(express.logger('dev'));
-app.use(express.bodyParser());
-app.use(express.methodOverride());
-app.use(app.router);
+// app.use(express.favicon());
+// app.use(express.logger('dev'));
+// app.use(express.bodyParser());
+// app.use(express.methodOverride());
+// app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Handle Errors gracefully
@@ -34,13 +35,13 @@ app.use(function(err, req, res, next) {
 app.get('/', routes.index);
 app.get('/messages/:room', routes.messages);
 app.get('/chat/:room', routes.chat);
-app.get('/history/:room', routes.history);
+//app.get('/history/:room', routes.history);
 
 // MongoDB API Routes
-app.get('/polls/polls', routes.list);
-app.get('/polls/:id', routes.poll);
-app.post('/polls', routes.create);
-app.post('/vote', routes.vote);
+// app.get('/polls/polls', routes.list);
+// app.get('/polls/:id', routes.poll);
+// app.post('/polls', routes.create);
+// app.post('/vote', routes.vote);
 
 io.sockets.on('connection', routes.chat);
 

@@ -1,4 +1,8 @@
+//var mongoose = require('mongoose');
 var mongoose = require('mongoose');
+require('../models/Room');
+require('../models/Message');
+mongoose.connect('mongodb://localhost:27017/chromeChat');
 var Room = mongoose.model('Room');
 var Message = mongoose.model('Message');
 var roomObj = null; // room object for message storage
@@ -114,6 +118,7 @@ exports.chat = function(req, res) {
 	});
 
 };
+
 
 /*
 
