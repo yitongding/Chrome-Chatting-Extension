@@ -1,0 +1,48 @@
+<script type="text/javascript" src="/javascripts/FBlogin.js"></script>
+<div class="FBlogin">
+	<div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="true" onlogin="checkLoginState();" ></div>
+	<div class="FBloginNote">Please login to chat</div>
+</div>
+<div class="chatArea">
+	<div class="topFiveArea">
+		<button type="button" class="btn btn-default" ng-click="isCollapsed = !isCollapsed">Top Five Likes</button>
+		<div uib-collapse="isCollapsed">
+			<ul id="topFive" class="topFive collapse">
+				<li ng-repear="message in topFives">
+					<span class="username">{{message.username}}</span>
+					<span class="messageBody">{{message.message}}</span>
+					<div class="likeBtn btn btn-default" ng-click="likeMsg()" id="{{message.id}}">
+						<span class="glyphicon glyphicon-thumbs-up"></span>
+						<span class="likeCount">{{message.likes}}</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="alertContainner">
+		<div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)">{{alert.msg}}</div>
+	</div>
+	<a class="historyBtn" href="#" ng-click="back()">Chating History</a>
+	<h2>Chating Message</h2>
+	<div class="messagesArea">
+		<ul class="messages">
+			<li ng-repear="message in messages">
+				<span class="username">{{message.username}}</span>
+				<span class="messageBody">{{message.message}}</span>
+				<div class="likeBtn btn btn-default" ng-click="likeMsg()" id="{{message.id}}">
+					<span class="glyphicon glyphicon-thumbs-up"></span>
+					<span class="likeCount">{{message.likes}}</span>
+				</div>
+				<div class="blockBtn btn btn-default" id="{{message.FBid}}" ng-click="block()">
+					<span class="glyphicon glyphicon-eye-close"></span>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="inputArea">
+	<div class="checkbox">
+		<label><input type="checkbox" class="anonyousCheckbox" value="">Anonymous</label>
+	</div>
+	<input class="inputMessage" data-emojiable="true" placeholder="Type here..." disabled />
+</div>
