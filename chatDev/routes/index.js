@@ -11,7 +11,9 @@ module.exports = function(io) {
 
   router.get('/', function(req, res, next) {
     url = req.param('url');
-    // username = req.param('username');
+    if (typeof url == 'undefined') {
+      url = "54.213.44.54:3000";
+    }  
     res.render('index', {
       historyLink: encodeURIComponent(url)
     });
