@@ -1,27 +1,38 @@
-/*jshint node:true*/
 var express = require('express');
-var routes = require('./routes');
-var http = require('http');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var mongoose = require('mongoose');
+require('./modules/Room');
+require('./modules/Message');
+mongoose.connect('mongodb://localhost:27017/chromeChat');
 
+var app = express();
+// setup socket.io
+var socket_io = require("socket.io");
+var io = socket_io();
+app.io = io;
 
 var app = express();
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
-app.set('port', process.env.VCAP_APP_PORT || 3000);
+var index = require('./routes/index')(io);
+var history = require('./routes/history');
+
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-// app.use(express.favicon());
-// app.use(express.logger('dev'));
-// app.use(express.bodyParser());
-// app.use(express.methodOverride());
-// app.use(app.router);
+
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Handle Errors gracefully
@@ -32,19 +43,42 @@ app.use(function(err, req, res, next) {
 });
 
 // Main App Page
-app.get('/', routes.index);
-app.get('/messages/:room', routes.messages);
-app.get('/chat/:room', routes.chat);
-//app.get('/history/:room', routes.history);
+app.use('/history', history);
+app.use('/', index);
 
-// MongoDB API Routes
-// app.get('/polls/polls', routes.list);
-// app.get('/polls/:id', routes.poll);
-// app.post('/polls', routes.create);
-// app.post('/vote', routes.vote);
+//app.get('/messages/:room', routes.messages);
+//app.get('/chat/:room', routes.chat);
 
-io.sockets.on('connection', routes.chat);
-
-server.listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
+
+// error handlers
+
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+  app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+      message: err.message,
+      error: err
+    });
+  });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {}
+  });
+});
+
+
+module.exports = app;
