@@ -22,6 +22,7 @@ exports.index = function(req, res) {
 };
 
 exports.messages = function(req, res) {
+	console.log('test:  '+req);
 	var room = res.params.room;
 
 

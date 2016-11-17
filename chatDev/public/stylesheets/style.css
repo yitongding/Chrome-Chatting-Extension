@@ -133,6 +133,7 @@ ul {
   color:white;
   position: fixed;
   bottom: 0;
+  left: 30px;
   border-radius: 25px;
   background: rgba(10, 150, 230, 0.3);
   border: 5px solid #2a7ef0;
