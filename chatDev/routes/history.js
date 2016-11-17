@@ -10,6 +10,9 @@ router.get('/:room', function(req, res, next) {
   var ref = req.headers.referer;
   console.log(ref);
   var name = req.params.room;
+  if (typeof name == undefined) {
+    name = "54.213.44.54:3000";
+  }
   Room.findOne({name: name}).populate('messages').exec(function(err, room){
     if (err || !room) {
         console.log(err);

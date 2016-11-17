@@ -8,8 +8,8 @@
     <title>History</title>
   </head>
   <body>
-  	<a href="<%= ref %>">Go Back To Chat</a>
-	<ul>
+  	<button onclick="window.history.back()">Back to chat</button>
+    <ul>
   		<% messages.forEach(function(message) { %>
   			<li> <%= message.createAt %> - <%= message.username %> : <%= message.message %></li>
   		<% }); %>
