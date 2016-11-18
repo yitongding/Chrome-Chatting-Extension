@@ -61,17 +61,17 @@ module.exports = function(io) {
 
 
   router.get('/chat/lastTen/:room', function(req, res, next) {
-    var room = req.params.room;
+    var room = decodeURIComponent(req.params.room);
     fetchLastTen(res, room);
   });
 
   router.get('/chat/topFive/:room', function(req, res, next) {
-    var room = req.params.room;
+    var room = decodeURIComponent(req.params.room);
     fetchTopFive(res, room, null);
   });
 
   router.get('/chat/:room', function(req, res, next) {
-    roomUrl = req.params.room;
+    roomUrl = decodeURIComponent(req.params.room);
     res.json();
   });
 
@@ -81,7 +81,7 @@ module.exports = function(io) {
   });
 
   router.get('/history/:room', function(req, res, next) {
-    var room = req.params.room;
+    var room = decodeURIComponent(req.params.room);
     if (typeof room == undefined) {
       room = "54.213.44.54:3000";
     }
