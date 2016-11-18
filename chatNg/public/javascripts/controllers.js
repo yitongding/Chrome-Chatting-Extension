@@ -4,9 +4,10 @@ function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg, histo
 	$scope.blockList = [];
 	$scope.alerts = [];
 	$scope.topFiveCollapsed = true;
-	$scope.messages = lastTenMsg.get({
+	$scope.lastTenMsg = lastTenMsg.get({
 		room: $routeParams.room
 	});
+	$scope.messages = [];
 
 	$scope.topFives = topFiveMsg.get({
 		room: $routeParams.room

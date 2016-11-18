@@ -25,6 +25,18 @@
 	<h2>Chating Message</h2>
 	<div class="messagesArea">
 		<ul class="messages">
+			<li ng-repeat="message in lastTenMsg">
+				<span class="username">{{message.username}}</span>
+				<span class="messageBody">{{message.message}}</span>
+				<div class="likeBtn btn btn-default" ng-click="likeMsg(message)" id="{{message.id}}">
+					<span class="glyphicon glyphicon-thumbs-up"></span>
+					<span class="likeCount">{{message.upvotes}}</span>
+				</div>
+			</li>
+			<li>
+				<span class="username">SYSTEM</span>
+				<span class="messageBody">^^^^ Last Ten Messages ^^^^</span>
+			</li>
 			<li ng-repeat="message in messages">
 				<span class="username">{{message.username}}</span>
 				<span class="messageBody">{{message.message}}</span>
