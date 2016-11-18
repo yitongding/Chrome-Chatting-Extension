@@ -2,6 +2,7 @@
 function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg) {
 	$scope.blockList = [];
 	$scope.topFiveCollapsed = true;
+	$scope.anonymous = false;
 	$scope.messages = lastTenMsg.get({
 		room: $routeParams.room
 	});
@@ -83,10 +84,7 @@ function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg) {
 			// if there is a non-empty message
 			$('.inputMessage').val('');
 
-			if ($('.anonymousCheckbox').checked)
-				var anonymous = true;
-			else
-				var anonymous = false;
+			var anonymous = $scope.anonymous;
 
 			var message = {
 				text: text,
