@@ -1,6 +1,7 @@
 // Controller for the coming message
 function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg) {
 	$scope.blockList = [];
+	$scope.topFiveCollapsed = true;
 	$scope.messages = lastTenMsg.get({
 		room: $routeParams.room
 	});

@@ -4,8 +4,8 @@
 </div>
 <div class="chatArea">
 	<div class="topFiveArea">
-		<button type="button" class="btn btn-default" ng-click="isCollapsed = !isCollapsed">Top Five Likes</button>
-		<div uib-collapse="isCollapsed">
+		<button type="button" class="btn btn-default" ng-click="topFiveCollapsed = !topFiveCollapsed">Top Five Likes</button>
+		<div uib-collapse="topFiveCollapsed">
 			<ul id="topFive" class="topFive">
 				<li ng-repeat="message in topFives">
 					<span class="username">{{message.username}}</span>
