@@ -2,6 +2,7 @@
 function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg, historyMsg) {
 	$scope.room = $routeParams.room;
 	$scope.blockList = [];
+	$scope.alerts = [];
 	$scope.topFiveCollapsed = true;
 	$scope.messages = lastTenMsg.get({
 		room: $routeParams.room
