@@ -32,9 +32,9 @@ function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg) {
 	});
 
 
-	$scope.likeMsg = function(event) {
+	$scope.likeMsg = function(message) {
 		var room = $routeParams.room,
-			msgId = event.target.id;
+			msgId = message._id;
 		var likeObj = {
 			room: room,
 			msgId: msgId
@@ -42,8 +42,8 @@ function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg) {
 		socket.emit('likeMsg', likeObj);
 	};
 
-	$scope.block = function(event) {
-		var FBid = event.target.id;
+	$scope.block = function(message) {
+		var FBid = message.FBid;
 		$scope.blockList.push(FBid);
 		var msg = "That user has been added to your block list.!";
 		var type = "success";
