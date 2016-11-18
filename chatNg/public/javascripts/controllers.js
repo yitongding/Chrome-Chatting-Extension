@@ -29,8 +29,15 @@ function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg, histo
 			if (el._id == message._id) return true;
 			else return false;
 		});
-		$scope.lastTenMsg[idx].upvotes = message.upvotes;
-		$scope.messages[idx].upvotes = message.upvotes;
+		if (idx != -1)
+			$scope.messages[idx].upvotes = message.upvotes;
+		idx = $scope.lastTenMsg.findIndex(function(el) {
+			if (el._id == message._id) return true;
+			else return false;
+		});
+		if (idx != -1)
+			$scope.lastTenMsg[idx].upvotes = message.upvotes;
+		
 		// $scope.topFives = topFiveMsg.get({
 		// 	room: $routeParams.room
 		// });
