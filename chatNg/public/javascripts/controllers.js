@@ -2,7 +2,6 @@
 function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg) {
 	$scope.blockList = [];
 	$scope.topFiveCollapsed = true;
-	$scope.anonymous = false;
 	$scope.messages = lastTenMsg.get({
 		room: $routeParams.room
 	});
