@@ -88,7 +88,7 @@ function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg) {
 		}
 	}
 
-	$window.keydown(function(event) {
+	$(window).keydown(function(event) {
 		// When the client hits ENTER on their keyboard 
 		if (event.which === 13) {
 			sendMessage();

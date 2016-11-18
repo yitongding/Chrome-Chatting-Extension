@@ -31,11 +31,12 @@ module.exports = function(io) {
 
   var fetchTopFive = function(res, room) {
     Message.find({
-        room: room
+        room: roomObj
       })
       .sort('-upvotes')
       .exec(function(err, messages) {
-        res.json(messages.slice(0, 5));
+console.log(messages);        
+res.json(messages.slice(0, 5));
       });
   };
 

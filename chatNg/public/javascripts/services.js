@@ -1,10 +1,10 @@
 // Angular service module for connecting to JSON APIs
 angular.module('chatServices', ['ngResource']).
 	factory('lastTenMsg', function($resource) {
-		return $resource('chat/lastTen/:room')
+		return $resource('chat/lastTen/:room',{}, {'get': {method: 'GET', isArray: true}})
 	}).
 	factory('topFiveMsg', function($resource) {
-		return $resource('chat/topFive/:room')
+		return $resource('chat/topFive/:room',{}, {'get': {method: 'GET', isArray: true}})
 	}).
 	factory('Poll', function($resource) {
 		return $resource('polls/:pollId', {}, {

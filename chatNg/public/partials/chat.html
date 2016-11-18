@@ -8,7 +8,7 @@
 		<button type="button" class="btn btn-default" ng-click="isCollapsed = !isCollapsed">Top Five Likes</button>
 		<div uib-collapse="isCollapsed">
 			<ul id="topFive" class="topFive collapse">
-				<li ng-repear="message in topFives">
+				<li ng-repeat="message in topFives">
 					<span class="username">{{message.username}}</span>
 					<span class="messageBody">{{message.message}}</span>
 					<div class="likeBtn btn btn-default" ng-click="likeMsg()" id="{{message.id}}">
@@ -26,7 +26,7 @@
 	<h2>Chating Message</h2>
 	<div class="messagesArea">
 		<ul class="messages">
-			<li ng-repear="message in messages">
+			<li ng-repeat="message in messages">
 				<span class="username">{{message.username}}</span>
 				<span class="messageBody">{{message.message}}</span>
 				<div class="likeBtn btn btn-default" ng-click="likeMsg()" id="{{message.id}}">
