@@ -214,13 +214,14 @@ function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg, histo
 
 
 function ChatHistoryCtrl($scope, $routeParams, historyMsg) {
+	$scope.room = $routeParams.room;
 	$scope.messages = historyMsg.get({
 		room: $routeParams.room
 	});
 
-	$scope.back = function() {
-		window.history.back();
-	}
+	// $scope.back = function() {
+	// 	window.history.back();
+	// }
 }
 
 /*
