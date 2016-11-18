@@ -35,8 +35,7 @@ module.exports = function(io) {
       })
       .sort('-upvotes')
       .exec(function(err, messages) {
-console.log(messages);        
-res.json(messages.slice(0, 5));
+        res.json(messages.slice(0, 5));
       });
   };
 
@@ -59,7 +58,7 @@ res.json(messages.slice(0, 5));
     });
   }
 
-  
+
   router.get('/chat/lastTen/:room', function(req, res, next) {
     var room = req.params.room;
     fetchLastTen(res, room);
