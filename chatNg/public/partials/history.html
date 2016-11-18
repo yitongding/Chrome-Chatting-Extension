@@ -1,4 +1,4 @@
-<a href="/#/chat/{{room}}" class="btn btn-default">Back to chat</a>
+<button ng-click="back()">Back to chat</button>
 <ul>
 	<li ng-repeat="message in messages | orderBy:'-'">{{message.createdAt}} - {{message.username}} : {{message.message}}</li>
 </ul>
