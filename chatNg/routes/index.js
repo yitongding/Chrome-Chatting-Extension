@@ -151,7 +151,6 @@ module.exports = function(io) {
           message.upvote(function() {
             console.log('user <' + socket.username + '> liked <' + message.message + '>');
             io.to(socket.room).emit('likeMsg', message);
-            findTopFive(message.room);
           });
         });
     });
