@@ -1,5 +1,5 @@
 // Controller for the coming message
-function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg) {
+function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg, historyMsg) {
 	$scope.room = $routeParams.room;
 	$scope.blockList = [];
 	$scope.topFiveCollapsed = true;
@@ -212,8 +212,8 @@ function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg) {
 }
 
 
-function ChatHistoryCtrl($scope, $routeParams, Message) {
-	$scope.messages = Message.his({
+function ChatHistoryCtrl($scope, $routeParams, historyMsg) {
+	$scope.messages = historyMsg.get({
 		room: $routeParams.room
 	});
 
