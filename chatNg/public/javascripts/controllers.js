@@ -53,7 +53,7 @@ function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg, histo
 		$scope.blockList.push(FBid);
 		var msg = "That user has been added to your block list.!";
 		var type = "success";
-		if (Fbid == 0) {
+		if (FBid == 0) {
 			msg = "NOTE: all anonyous message has been blocked.";
 			type = "warning";
 		}
