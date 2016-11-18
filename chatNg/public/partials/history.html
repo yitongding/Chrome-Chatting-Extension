@@ -1,4 +1,4 @@
-<button ug-click="back()">Back to chat</button>
+<button ng-click="back()">Back to chat</button>
 <ul>
-	<li ug-repeat="message in messages">{{message.createAt}} - {{message.username}} : {{message.message}}</li>
+	<li ng-repeat="message in messages">{{message.createAt}} - {{message.username}} : {{message.message}}</li>
 </ul>
