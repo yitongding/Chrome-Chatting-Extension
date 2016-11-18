@@ -95,11 +95,12 @@ module.exports = function(io) {
 
   io.sockets.on('connection', function(socket) {
 
-    socket.room = roomUrl;
-
     // send estabilish message on connection
     socket.emit('established', "connection established");
 
+    socket.on("room url", function(room) {
+      socket.room = room;
+    });
 
     socket.on("FBlogin", function(data) {
       socket.username = data.name;
