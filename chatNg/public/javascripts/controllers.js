@@ -41,6 +41,7 @@ function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg, histo
 
 
 	$scope.likeMsg = function(message) {
+		message.likeBtn = true;
 		var room = $routeParams.room,
 			msgId = message._id;
 		var likeObj = {
@@ -51,6 +52,7 @@ function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg, histo
 	};
 
 	$scope.block = function(message) {
+		message.blockBtn = true;
 		var FBid = message.FBid;
 		$scope.blockList.push(FBid);
 		var msg = "That user has been added to your block list.!";

@@ -10,7 +10,7 @@
 				<li ng-repeat="message in topFives">
 					<span class="username">{{message.username}}</span>
 					<span class="messageBody">{{message.message}}</span>
-					<div class="likeBtn btn btn-default" ng-click="likeMsg(message)" id="{{message.id}}">
+					<div class="likeBtn btn btn-default" ng-click="likeMsg(message)" ng-disabled="message.likeBtn" id="{{message.id}}">
 						<span class="glyphicon glyphicon-thumbs-up"></span>
 						<span class="likeCount">{{message.upvotes}}</span>
 					</div>
@@ -28,7 +28,7 @@
 			<li ng-repeat="message in lastTenMsg">
 				<span class="username">{{message.username}}</span>
 				<span class="messageBody">{{message.message}}</span>
-				<div class="likeBtn btn btn-default" ng-click="likeMsg(message)" id="{{message.id}}">
+				<div class="likeBtn btn btn-default" ng-click="likeMsg(message)" ng-disabled="message.likeBtn" id="{{message.id}}">
 					<span class="glyphicon glyphicon-thumbs-up"></span>
 					<span class="likeCount">{{message.upvotes}}</span>
 				</div>
@@ -40,11 +40,11 @@
 			<li ng-repeat="message in messages">
 				<span class="username">{{message.username}}</span>
 				<span class="messageBody">{{message.message}}</span>
-				<div class="likeBtn btn btn-default" ng-click="likeMsg(message)" id="{{message.id}}">
+				<div class="likeBtn btn btn-default" ng-click="likeMsg(message)" ng-disabled="message.likeBtn" id="{{message.id}}">
 					<span class="glyphicon glyphicon-thumbs-up"></span>
 					<span class="likeCount">{{message.upvotes}}</span>
 				</div>
-				<div class="blockBtn btn btn-default" id="{{message.FBid}}" ng-click="block(message)">
+				<div class="blockBtn btn btn-default" id="{{message.FBid}}" ng-disabled="message.blockBtn" ng-click="block(message)">
 					<span class="glyphicon glyphicon-eye-close"></span>
 				</div>
 			</li>
