@@ -83,7 +83,10 @@ function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg) {
 			// if there is a non-empty message
 			$('.inputMessage').val('');
 
-			var anonymous = $scope.anonymous;
+			if ($('.anonymousCheckbox').checked)
+				var anonymous = true;
+			else
+				var anonymous = false;
 
 			var message = {
 				text: text,
