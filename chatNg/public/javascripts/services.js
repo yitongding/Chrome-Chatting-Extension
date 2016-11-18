@@ -6,6 +6,9 @@ angular.module('chatServices', ['ngResource']).
 	factory('topFiveMsg', function($resource) {
 		return $resource('chat/topFive/:room',{}, {'get': {method: 'GET', isArray: true}})
 	}).
+	factory('historyMsg', function($resource) {
+		return $resource('history/:room',{}, {'get': {method: 'GET', isArray: true}})
+	}).
 	factory('Poll', function($resource) {
 		return $resource('polls/:pollId', {}, {
 			// Use this method for getting a list of polls
