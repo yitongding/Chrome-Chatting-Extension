@@ -1,5 +1,5 @@
 // Angular module, defining routes for the app
-angular.module('chatApp', ['chatServices']).
+angular.module('chatApp', ['ui.bootstrap','ngRoute','chatServices']).
 	config(['$routeProvider', function($routeProvider) {
 		$routeProvider.
 			when('/chat/:room', { templateUrl: 'partials/index.html', controller: ChatMsgCtrl }).

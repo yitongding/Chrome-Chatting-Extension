@@ -5,7 +5,6 @@ var $inputMessage = $('.inputMessage'); // Input message input box
 var $messages = $('.messages'); // Messages area
 var $topFive = $('.topFive');
 var blockList = [];
-
 /* help funcitons*/
 
 // Sends a chat message

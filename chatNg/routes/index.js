@@ -89,7 +89,7 @@ module.exports = function(io) {
 
   io.sockets.on('connection', function(socket) {
 
-    var socket.room = roomUrl;
+    socket.room = roomUrl;
 
     // send estabilish message on connection
     socket.emit('established', "connection established");

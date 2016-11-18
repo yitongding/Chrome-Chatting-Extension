@@ -6,8 +6,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var mongoose = require('mongoose');
-require('./modules/Room');
-require('./modules/Message');
+require('./models/Room');
+require('./models/Message');
 mongoose.connect('mongodb://localhost:27017/chromeChat');
 
 var app = express();
@@ -16,12 +16,9 @@ var socket_io = require("socket.io");
 var io = socket_io();
 app.io = io;
 
-var app = express();
-var server = http.createServer(app);
-var io = require('socket.io').listen(server);
 
 var index = require('./routes/index')(io);
-var history = require('./routes/history');
+//var history = require('./routes/history');
 
 
 app.set('views', path.join(__dirname, 'views'));
@@ -34,7 +31,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 // Handle Errors gracefully
 app.use(function(err, req, res, next) {
 	if(!err) return next();
@@ -43,7 +40,7 @@ app.use(function(err, req, res, next) {
 });
 
 // Main App Page
-app.use('/history', history);
+//app.use('/history', history);
 app.use('/', index);
 
 //app.get('/messages/:room', routes.messages);
