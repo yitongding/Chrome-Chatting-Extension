@@ -100,6 +100,7 @@ module.exports = function(io) {
 
     socket.on("room url", function(room) {
       socket.room = room;
+      socket.join(room);
     });
 
     socket.on("FBlogin", function(data) {
