@@ -116,7 +116,7 @@ module.exports = function(io) {
 
     socket.on('new message', function(message) {
       // log it to the Node.JS output
-      console.log("user <" + socket.username + "> message <" + message.text + "> in room <" + socket.room + ">");
+      console.log("user <" + socket.username + "> message <" + message.text + "> in room <" + socket.room + "> anonymous<"+message.anonymous);
 
       var text = message.text;
       var username = (message.anonymous) ? "anonymous" : socket.username;
