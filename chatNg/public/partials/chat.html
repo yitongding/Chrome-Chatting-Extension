@@ -21,7 +21,7 @@
 	<div class="alertContainner">
 		<div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)">{{alert.msg}}</div>
 	</div>
-	<a class="historyBtn" href="/history/{{$routeParams.room}}">Chating History</a>
+	<a class="historyBtn" href="/history/{{room}}">Chating History</a>
 	<h2>Chating Message</h2>
 	<div class="messagesArea">
 		<ul class="messages">
