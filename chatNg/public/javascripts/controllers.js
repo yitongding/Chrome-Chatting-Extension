@@ -26,9 +26,13 @@ function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg) {
 			else return false;
 		});
 		$scope.messages[idx].upvotes = message.upvotes;
-		$scope.topFives = topFiveMsg.get({
-			room: $routeParams.room
-		});
+		// $scope.topFives = topFiveMsg.get({
+		// 	room: $routeParams.room
+		// });
+	});
+
+	socket.on("top five", function(messages) {
+		$scope.topFives = messages;
 	});
 
 

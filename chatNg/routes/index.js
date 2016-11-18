@@ -35,7 +35,9 @@ module.exports = function(io) {
       })
       .sort('-upvotes')
       .exec(function(err, messages) {
-        res.json(messages.slice(0, 5));
+        socket.emit("top five", messages.slice(0, 5));
+        // res.json(messages.slice(0, 5));
+        res.json();
       });
   };
 

@@ -12,7 +12,7 @@
 					<span class="messageBody">{{message.message}}</span>
 					<div class="likeBtn btn btn-default" ng-click="likeMsg(message)" id="{{message.id}}">
 						<span class="glyphicon glyphicon-thumbs-up"></span>
-						<span class="likeCount">{{message.likes}}</span>
+						<span class="likeCount">{{message.upvotes}}</span>
 					</div>
 				</li>
 			</ul>
@@ -30,7 +30,7 @@
 				<span class="messageBody">{{message.message}}</span>
 				<div class="likeBtn btn btn-default" ng-click="likeMsg(message)" id="{{message.id}}">
 					<span class="glyphicon glyphicon-thumbs-up"></span>
-					<span class="likeCount">{{message.likes}}</span>
+					<span class="likeCount">{{message.upvotes}}</span>
 				</div>
 				<div class="blockBtn btn btn-default" id="{{message.FBid}}" ng-click="block(message)">
 					<span class="glyphicon glyphicon-eye-close"></span>
