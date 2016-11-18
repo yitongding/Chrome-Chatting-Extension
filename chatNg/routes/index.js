@@ -46,7 +46,7 @@ module.exports = function(io) {
 
   var fetchHistory = function(res, room, socket) {
     Room.findOne({
-      name: name
+      name: room
     }).populate('messages').exec(function(err, room) {
       if (err || !room) {
         console.log(err);
