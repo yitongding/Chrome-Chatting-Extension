@@ -111,7 +111,7 @@ module.exports = function(io) {
 
     socket.on('new message', function(message) {
       // log it to the Node.JS output
-      console.log("user <" + socket.username + "> message <" + message + "> in room <" + socket.room + ">");
+      console.log("user <" + socket.username + "> message <" + message.text + "> in room <" + socket.room + ">");
 
       var text = message.text;
       var username = (message.anonymous) ? "anonymous" : socket.username;
@@ -130,6 +130,7 @@ module.exports = function(io) {
         roomObj.save(function(err, roomObj) {
           if (err) console.log(err);
           // broadcast message to the room
+          console.log('ready to send message');
           io.to(socket.room).emit('new message', {
             username: username,
             message: text,
