@@ -5,5 +5,5 @@ angular.module('chatApp', ['ui.bootstrap','ngRoute','chatServices']).
 			when('/chat/:room', { templateUrl: 'partials/chat.html', controller: ChatMsgCtrl }).
       when('/history/:room', { templateUrl: 'partials/history.html', controller: ChatHistoryCtrl }).
 			// If invalid route, just redirect to the main list view
-			otherwise({ redirectTo: '/chat/' });
+			otherwise({ redirectTo: '/chat/54.213.44.54:3000' });
 	}]);
