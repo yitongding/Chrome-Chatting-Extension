@@ -5,12 +5,11 @@
 </div>
 <div class="chatArea">
 	<div class="topFiveArea">
-		<button class="btn btn-default" ng-click="collapsed = !collapsed">Toggle</button>
-	    <div collapse="collapsed">
-	      <div>
-	        <h1>Hello Plunker!</h1>
-	      </div>
-	    </div>
+		<button type="button" class="btn btn-default" ng-click="isCollapsed = !isCollapsed">Toggle collapse Vertically</button>
+		<hr>
+		<div uib-collapse="isCollapsed">
+			<div>Some content</div>
+		</div>
 		<button type="button" class="btn btn-default" ng-click="isCollapsed = !isCollapsed">Top Five Likes</button>
 		<div uib-collapse="isCollapsed">
 			<ul id="topFive" class="topFive collapse">
