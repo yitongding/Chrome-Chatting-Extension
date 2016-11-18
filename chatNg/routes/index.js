@@ -54,10 +54,7 @@ module.exports = function(io) {
           err: "No message in the room"
         });
       } else {
-        res.json({
-          err: false,
-          messages: room.messages,
-        });
+        res.json(room.messages);
       }
     });
   }
