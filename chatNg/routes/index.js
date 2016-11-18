@@ -131,6 +131,7 @@ module.exports = function(io) {
           if (err) console.log(err);
           // broadcast message to the room
           console.log('ready to send message');
+          console.log(username + ' in ' + socket.room);
           io.to(socket.room).emit('new message', {
             username: username,
             message: text,
