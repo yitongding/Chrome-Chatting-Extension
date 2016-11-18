@@ -58,19 +58,25 @@ module.exports = function(io) {
     });
   }
 
-
-  router.get('/chat/:room', function(req, res, next) {
-    roomUrl = req.params.room;
-  });
-
-  router.get('/chat/:room/lastTen', function(req, res, next) {
+  
+  router.get('/chat/lastTen/:room', function(req, res, next) {
     var room = req.params.room;
     fetchLastTen(res, room);
   });
 
-  router.get('/chat/:room/topFive', function(req, res, next) {
+  router.get('/chat/topFive/:room', function(req, res, next) {
     var room = req.params.room;
     fetchTopFive(res, room);
+  });
+
+  router.get('/chat/:room', function(req, res, next) {
+    roomUrl = req.params.room;
+    res.json();
+  });
+
+  router.get('/chat/', function(req, res, next) {
+    roomUrl = '54.213.44.54:3000';
+    res.json();
   });
 
   router.get('/history/:room', function(req, res, next) {

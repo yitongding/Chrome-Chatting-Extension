@@ -1,11 +1,11 @@
 // Controller for the coming message
-function ChatMsgCtrl($scope, $routeParams, socket, Message) {
+function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg) {
 	$scope.blockList = [];
-	$scope.messages = Message.get({
+	$scope.messages = lastTenMsg.get({
 		room: $routeParams.room
 	});
 
-	$scope.topFives = Message.top({
+	$scope.topFives = topFiveMsg.get({
 		room: $routeParams.room
 	});
 	// need to add system notice of chat history
@@ -16,16 +16,15 @@ function ChatMsgCtrl($scope, $routeParams, socket, Message) {
 		}
 	});
 
-	socket.on("topFive", function(data) {
-		$scope.topFives = data;
-	});
-
 	socket.on("likeMsg", function(message) {
 		var idx = $scope.messages.findIndex(function(el) {
 			if (el._id == message._id) return true;
 			else return false;
 		});
 		$scope.messages[idx].upvotes = message.upvotes;
+		$scope.topFives = topFiveMsg.get({
+			room: $routeParams.room
+		});
 	});
 
 

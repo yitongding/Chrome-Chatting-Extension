@@ -1,11 +1,10 @@
 // Angular service module for connecting to JSON APIs
 angular.module('chatServices', ['ngResource']).
-	factory('Message', function($resource) {
-		return $resource('messages/:room', {}, {
-			// Use this method for getting a list of polls
-			top: { method: 'GET', params: { top: true }, isArray: true },
-			his: { method: 'GET', params: { his: true }, isArray: true }
-		})
+	factory('lastTenMsg', function($resource) {
+		return $resource('chat/lastTen/:room')
+	}).
+	factory('topFiveMsg', function($resource) {
+		return $resource('chat/topFive/:room')
 	}).
 	factory('Poll', function($resource) {
 		return $resource('polls/:pollId', {}, {
