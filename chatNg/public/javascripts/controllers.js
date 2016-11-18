@@ -29,6 +29,7 @@ function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg, histo
 			if (el._id == message._id) return true;
 			else return false;
 		});
+		$scope.lastTenMsg[idx].upvotes = message.upvotes;
 		$scope.messages[idx].upvotes = message.upvotes;
 		// $scope.topFives = topFiveMsg.get({
 		// 	room: $routeParams.room
