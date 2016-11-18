@@ -29,20 +29,22 @@ module.exports = function(io) {
     });
   };
 
-  var fetchTopFive = function(res, room) {
+  var fetchTopFive = function(res, room, socket) {
     Message.find({
         room: roomObj
       })
       .sort('-upvotes')
       .exec(function(err, messages) {
-        socket.emit("top five", messages.slice(0, 5));
+        if (socket)
+          socket.emit("top five", messages.slice(0, 5));
         // res.json(messages.slice(0, 5));
-        res.json();
+        if (res)
+          res.json(messages.slice(0, 5));
       });
   };
 
 
-  var fetchHistory = function(res, room) {
+  var fetchHistory = function(res, room, socket) {
     Room.findOne({
       name: name
     }).populate('messages').exec(function(err, room) {
@@ -68,7 +70,7 @@ module.exports = function(io) {
 
   router.get('/chat/topFive/:room', function(req, res, next) {
     var room = req.params.room;
-    fetchTopFive(res, room);
+    fetchTopFive(res, room, null);
   });
 
   router.get('/chat/:room', function(req, res, next) {
@@ -155,6 +157,7 @@ module.exports = function(io) {
           message.upvote(function() {
             console.log('user <' + socket.username + '> liked <' + message.message + '>');
             io.to(socket.room).emit('likeMsg', message);
+            fetchTopFive(null, socket.room, socket);
           });
         });
     });
