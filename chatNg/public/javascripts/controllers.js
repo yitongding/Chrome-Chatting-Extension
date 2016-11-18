@@ -8,7 +8,10 @@ function ChatMsgCtrl($scope, $routeParams, socket, lastTenMsg, topFiveMsg) {
 	$scope.topFives = topFiveMsg.get({
 		room: $routeParams.room
 	});
-	// need to add system notice of chat history
+
+	socket.on('established', function(data) {
+		console.log(data);
+	});
 
 	socket.on('new message', function(data) {
 		if ($scope.blockList.indexOf(data.FBid) == -1) {
