@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" ng-app='chatApp'>
+	<head>
+		<% include ./partials/head %>
+	</head>
+
+	<body>
+		<div ng-inculde="partials/nav.html" ng-controller="NavbarCtrl">
+		</div>
+		<div class="container">
+			<div ng-view>
+			</div>
+		</div>
+	</body>
+</html>
