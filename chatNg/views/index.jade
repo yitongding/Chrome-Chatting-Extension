@@ -23,6 +23,6 @@ html(lang='en', ng-app='chatApp')
 		link(rel='stylesheet' href='/stylesheets/style.css')
 	//- body(ng-controller="PollListCtrl")
 	body
-		div(ng-include="partials/nav.html")
+		include partials/nav.html
 		div.container
 			div(ng-view)
