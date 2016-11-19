@@ -130,7 +130,7 @@ function ChatHistoryCtrl($scope, $routeParams, historyMsg) {
 }
 
 
-angular.module('chatApp').controller('NavbarCtrl', ['$scope', '$rootScope', '$routeParams', function NavbarCtrl($scope, $rootScope, $routeParams) {
+angular.module('chatApp').controller('NavbarCtrl', ['$scope', '$rootScope', '$routeParams', 'socket', function NavbarCtrl($scope, $rootScope, $routeParams, socket) {
 	$scope.room = $routeParams.room;
 
 	/*****************/
