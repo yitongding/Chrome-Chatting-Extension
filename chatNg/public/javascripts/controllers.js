@@ -37,7 +37,7 @@ function ChatMsgCtrl($scope, $rootScope, $routeParams, socket, lastTenMsg, topFi
 		});
 		if (idx != -1)
 			$scope.lastTenMsg[idx].upvotes = message.upvotes;
-		
+
 		// $scope.topFives = topFiveMsg.get({
 		// 	room: $routeParams.room
 		// });
@@ -130,7 +130,7 @@ function ChatHistoryCtrl($scope, $routeParams, historyMsg) {
 }
 
 
-function NavbarCtrl($scope, $rootScope, $routeParams) {
+angular.module('chatApp').controller('NavbarCtrl', ['$scope', '$rootScope', '$routeParams', function NavbarCtrl($scope, $rootScope, $routeParams) {
 	$scope.room = $routeParams.room;
 
 	/*****************/
@@ -213,7 +213,7 @@ function NavbarCtrl($scope, $rootScope, $routeParams) {
 		$rootScope.FBlogin = false;
 		// $('.FBloginNote').text("Please login to chat");
 	}
-}
+}]);
 
 /*
 // Controller for an individual poll
