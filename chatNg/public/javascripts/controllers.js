@@ -1,6 +1,6 @@
 // Controller for the coming message
 function ChatMsgCtrl($scope, $rootScope, $routeParams, socket, lastTenMsg, topFiveMsg, ezfb) {
-	$scope.room = $routeParams.room;
+	$rootScope.room = $routeParams.room;
 	$scope.blockList = [];
 	$scope.alerts = [];
 	$scope.topFiveCollapsed = true;
@@ -152,7 +152,7 @@ function ChatHistoryCtrl($scope, $routeParams, historyMsg) {
 angular.module('chatApp').controller('NavbarCtrl',
 	function NavbarCtrl($scope, $rootScope, $routeParams, socket, ezfb) {
 
-		$scope.room = $routeParams.room;
+		// $scope.room = $routeParams.room;
 		updateLoginStatus(updateApiMe);
 
 		$scope.FBlogin = function() {
