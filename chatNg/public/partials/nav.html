@@ -10,7 +10,7 @@
 				<li><a href="/#/history/{{room}}">History</a></li>
 				<li><a href="/#/vote/{{room}}"></a>Vote</li>
 				<li><button class="btn btn-primary" ng-click="FBlogin()" ng-disabled="FBloginStatus.status == 'connected'">Login with Facebook</button></li>
-				<li><button class="btn btn-danger" ng-click="logout()" ng-disabled="!FBloginStatus || FBloginStatus.status != 'connected'">Logout</button></li>
+				<li><button class="btn btn-danger" ng-click="FBlogout()" ng-disabled="!FBloginStatus || FBloginStatus.status != 'connected'">Logout</button></li>
 			</ul>
 		</div>
 	</nav>

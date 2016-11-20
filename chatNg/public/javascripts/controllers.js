@@ -12,7 +12,17 @@ function ChatMsgCtrl($scope, $rootScope, $routeParams, socket, lastTenMsg, topFi
 	$scope.topFives = topFiveMsg.get({
 		room: $routeParams.room
 	});
-	updateLoginStatus();
+
+	// check FB login status
+	// updateLoginStatus();
+
+	// add listener on FB login status
+	// var watchList = ['FBloginStatus', 'FBapiMe'];
+	// angular.forEach(watchList, function(varName) {
+	// 	$scope.$watch(varName, function(val) {
+	// 		$rootScope.$broadcast("");
+	// 	}, true);
+	// });
 
 	socket.on('established', function(data) {
 		console.log(data);
@@ -111,13 +121,13 @@ function ChatMsgCtrl($scope, $rootScope, $routeParams, socket, lastTenMsg, topFi
 		}
 	}
 
-	function updateLoginStatus(more) {
-		ezfb.getLoginStatus(function(res) {
-			$scope.FBloginStatus = res;
+	// function updateLoginStatus(more) {
+	// 	ezfb.getLoginStatus(function(res) {
+	// 		$scope.FBloginStatus = res;
 
-			(more || angular.noop)();
-		});
-	}
+	// 		(more || angular.noop)();
+	// 	});
+	// }
 
 	$(window).keydown(function(event) {
 		// When the client hits ENTER on their keyboard 
@@ -163,7 +173,7 @@ angular.module('chatApp').controller('NavbarCtrl',
 
 		// var watchList = ['FBloginStatus', 'FBapiMe'];
 		// angular.forEach(watchList, function(varName) {
-		// 	$scope.$watch(varName, function(val) {
+		// 	$rootScope.$watch(varName, function(val) {
 		// 		$rootScope.$broadcast("");
 		// 	}, true);
 		// });
@@ -171,7 +181,7 @@ angular.module('chatApp').controller('NavbarCtrl',
 		// Update loginStatus result
 		function updateLoginStatus(more) {
 			ezfb.getLoginStatus(function(res) {
-				$scope.FBloginStatus = res;
+				$rootScope.FBloginStatus = res;
 
 				(more || angular.noop)();
 			});
@@ -180,7 +190,7 @@ angular.module('chatApp').controller('NavbarCtrl',
 		// Update api('/me') result
 		function updateApiMe() {
 			ezfb.api('/me', function(res) {
-				$scope.FBapiMe = res;
+				$rootScope.FBapiMe = res;
 				socket.emit("FBlogin", {
 					name: res.name,
 					id: res.id
