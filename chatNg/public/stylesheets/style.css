@@ -23,7 +23,7 @@ html, body {
   background: rgba(0%, 70%, 90%, 0.1);
   color:white;
 }
-li {    
+.chatArea li {    
     color: white;
     border-radius: 25px;
     padding-top: 2px;
@@ -34,7 +34,7 @@ li {
     width: 100%;
 }
 
-ul {
+.chatArea ul {
   list-style: none;
   word-wrap: break-word;
 }
