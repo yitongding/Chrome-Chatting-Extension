@@ -1,5 +1,5 @@
 // Controller for the coming message
-function ChatMsgCtrl($scope, $rootScope, $routeParams, socket, lastTenMsg, topFiveMsg, historyMsg) {
+function ChatMsgCtrl($scope, $rootScope, $routeParams, socket, lastTenMsg, topFiveMsg, ezfb) {
 	$scope.room = $routeParams.room;
 	$scope.blockList = [];
 	$scope.alerts = [];
@@ -12,6 +12,7 @@ function ChatMsgCtrl($scope, $rootScope, $routeParams, socket, lastTenMsg, topFi
 	$scope.topFives = topFiveMsg.get({
 		room: $routeParams.room
 	});
+	updateLoginStatus();
 
 	socket.on('established', function(data) {
 		console.log(data);
@@ -110,6 +111,14 @@ function ChatMsgCtrl($scope, $rootScope, $routeParams, socket, lastTenMsg, topFi
 		}
 	}
 
+	function updateLoginStatus(more) {
+		ezfb.getLoginStatus(function(res) {
+			$scope.FBloginStatus = res;
+
+			(more || angular.noop)();
+		});
+	}
+
 	$(window).keydown(function(event) {
 		// When the client hits ENTER on their keyboard 
 		if (event.which === 13) {
@@ -130,90 +139,52 @@ function ChatHistoryCtrl($scope, $routeParams, historyMsg) {
 }
 
 
-angular.module('chatApp').controller('NavbarCtrl', ['$scope', '$rootScope', '$routeParams', 'socket', function NavbarCtrl($scope, $rootScope, $routeParams, socket) {
-	$scope.room = $routeParams.room;
+angular.module('chatApp').controller('NavbarCtrl',
+	function NavbarCtrl($scope, $rootScope, $routeParams, socket, ezfb) {
 
-	/*****************/
-	/* FB login code */
-	/*****************/
-	(function(d, s, id) {
-		var js, fjs = d.getElementsByTagName(s)[0];
-		if (d.getElementById(id)) return;
-		js = d.createElement(s);
-		js.id = id;
-		js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8&appId=1338404279506042";
-		fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));
+		$scope.room = $routeParams.room;
+		updateLoginStatus(updateApiMe);
 
-	// This is called with the results from from FB.getLoginStatus().
-	function statusChangeCallback(response) {
-		console.log('statusChangeCallback');
-		console.log(response);
-		if (response.status === 'connected') {
-			// Logged into your app and Facebook.
-			successAPI();
-		} else if (response.status === 'not_authorized') {
-			failAPI();
-		} else {
-			failAPI();
-		}
-	}
-
-	function checkLoginState() {
-		FB.getLoginStatus(function(response) {
-			statusChangeCallback(response);
-		});
-	}
-
-	window.fbAsyncInit = function() {
-		FB.init({
-			appId: '{your-app-id}',
-			cookie: true, // enable cookies to allow the server to access 
-			// the session
-			xfbml: true, // parse social plugins on this page
-			version: 'v2.5' // use graph api version 2.5
-		});
-
-		FB.getLoginStatus(function(response) {
-			statusChangeCallback(response);
-		});
-
-	};
-
-	// Load the SDK asynchronously
-	(function(d, s, id) {
-		var js, fjs = d.getElementsByTagName(s)[0];
-		if (d.getElementById(id)) return;
-		js = d.createElement(s);
-		js.id = id;
-		js.src = "//connect.facebook.net/en_US/sdk.js";
-		fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));
-
-	// Here we run a very simple test of the Graph API after login is
-	// successful.  See statusChangeCallback() for when this call is made.
-	function successAPI() {
-		console.log('Welcome!  Fetching your information.... ');
-		FB.api('/me', function(response) {
-			console.log('Successful login for: ' + response.name);
-			socket.emit("FBlogin", {
-				name: response.name,
-				id: response.id
+		$scope.FBlogin = function() {
+			ezfb.login(function(res) {
+				if (res.authResponse) {
+					updateLoginStatus(updateApiMe);
+				}
+			}, {
+				scope: 'public_profile'
 			});
-			// $('.inputMessage').removeAttr('disabled');
-			$rootScope.FBlogin = true;
-			// $('.FBloginNote').text('Hello, ' + response.name);
-		});
-	}
+		}
 
-	function failAPI() {
-		console.log("Facebook login fail.");
-		// $('.inputMessage')
-		//	.attr('placeholder', "Please login to chat");
-		$rootScope.FBlogin = false;
-		// $('.FBloginNote').text("Please login to chat");
-	}
-}]);
+		$scope.FBlogout = function() {
+			ezfb.logout(function() {
+				updateLoginStatus(updateApiMe);
+			});
+		};
+
+		// var watchList = ['FBloginStatus', 'FBapiMe'];
+		// angular.forEach(watchList, function(varName) {
+		// 	$scope.$watch(varName, function(val) {
+		// 		$rootScope.$broadcast("");
+		// 	}, true);
+		// });
+
+		// Update loginStatus result
+		function updateLoginStatus(more) {
+			ezfb.getLoginStatus(function(res) {
+				$scope.FBloginStatus = res;
+
+				(more || angular.noop)();
+			});
+		}
+
+		// Update api('/me') result
+		function updateApiMe() {
+			ezfb.api('/me', function(res) {
+				$scope.FBapiMe = res;
+			});
+		}
+
+	});
 
 /*
 // Controller for an individual poll

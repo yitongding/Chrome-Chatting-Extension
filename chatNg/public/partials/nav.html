@@ -1,4 +1,4 @@
-<div ng-controller="NavbarCtrl">
+<div >
 	<nav class="navbar navbar-inverse">
 		<div class="container-fluid"> 
 			<div class="navbar-header">
@@ -9,12 +9,8 @@
 				<li><a href="/#/chat/{{room}}">Chat</a></li>
 				<li><a href="/#/history/{{room}}">History</a></li>
 				<li><a href="/#/vote/{{room}}"></a>Vote</li>
-				<li>
-					<div class="FBlogin">
-						<div class="fb-login-button" data-max-rows="1" data-size="medium" data-show-faces="false" data-auto-logout-link="true" onlogin="checkLoginState();" >
-						</div>
-					</div>
-				</li>
+				<li><button class="btn btn-primary" ng-click="FBlogin()" ng-disabled="FBloginStatus.status == 'connected'">Login with Facebook</button></li>
+				<li><button class="btn btn-danger" ng-click="logout()" ng-disabled="!FBloginStatus || FBloginStatus.status != 'connected'">Logout</button></li>
 			</ul>
 		</div>
 	</nav>

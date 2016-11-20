@@ -51,5 +51,5 @@
 	<div class="checkbox" ng-model="anonymous">
 		<label><input type="checkbox" class="anonymousCheckbox" ng-checked="anonymous" value="">Anonymous</label>
 	</div>
-	<input class="inputMessage" placeholder="Type here..." ng-disabled="!FBlogin" />
+	<input class="inputMessage" placeholder="Type here..." ng-disabled="!loginStatus || loginStatus.status != 'connected'" />
 </div>
