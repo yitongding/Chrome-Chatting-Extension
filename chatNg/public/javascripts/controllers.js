@@ -181,6 +181,10 @@ angular.module('chatApp').controller('NavbarCtrl',
 		function updateApiMe() {
 			ezfb.api('/me', function(res) {
 				$scope.FBapiMe = res;
+				socket.emit("FBlogin", {
+					name: res.name,
+					id: res.id
+				});
 			});
 		}
 
