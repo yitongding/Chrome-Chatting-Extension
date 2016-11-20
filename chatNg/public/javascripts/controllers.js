@@ -1,6 +1,6 @@
 // Controller for the coming message
 function ChatMsgCtrl($scope, $rootScope, $routeParams, socket, lastTenMsg, topFiveMsg, ezfb) {
-	$rootScope.room = $routeParams.room;
+	$rootScope.room = encodeURIComponent($routeParams.room);
 	$scope.blockList = [];
 	$scope.alerts = [];
 	$scope.topFiveCollapsed = true;
