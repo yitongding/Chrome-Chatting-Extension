@@ -149,7 +149,6 @@ function ChatHistoryCtrl($scope, $routeParams, historyMsg) {
 }
 
 // Controller for an individual poll
-angular.module('chatApp').controller('PollCtrl',
 function PollCtrl($scope, $routeParams, socket, Poll) {
 	$scope.polls = Poll.get({
 		room: $routeParams.room
@@ -188,7 +187,7 @@ function PollCtrl($scope, $routeParams, socket, Poll) {
 			alert('You must select an option to vote for');
 		}
 	};
-});
+};
 
 // Controller for creating a new poll
 function NewPollCtrl($scope, $location, $routeParams, Poll) {
