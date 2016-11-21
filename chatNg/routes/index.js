@@ -72,7 +72,7 @@ module.exports = function (io) {
           err: "No poll in the room"
         });
       } else {
-        var polls = room.polls;
+        var polls = room.polls.toObject();
         polls.forEach(function (poll, pollIdx) {
           polls[pollIdx].userVoted = false;
           poll.choices.forEach(function (choice, choiceIdx) {
