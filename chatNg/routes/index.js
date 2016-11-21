@@ -72,18 +72,19 @@ module.exports = function (io) {
           err: "No poll in the room"
         });
       } else {
-        var polls = room.polls.toObject();
-        polls.forEach(function (poll, pollIdx) {
-          polls[pollIdx].userVoted = false;
-          poll.choices.forEach(function (choice, choiceIdx) {
+        var polls = room.polls.map(function(poll) {
+          var tmppoll = poll.toObject();
+          tmppoll.userVoted = false;
+          tmppoll.choices.forEach(function (choice, choiceIdx) {
             choice.votes.forEach(function (vote, voteIdx) {
               if (vote.ip == ip) {
-                polls[pollIdx].userChoice = choice._id;
-                polls[pollIdx].userVoted = true;
+                tmppoll.userChoice = choice._id;
+                tmppoll.userVoted = true;
               }
-              delete polls[pollIdx].choices[choiceIdx].votes;
+              delete tmppoll.choices[choiceIdx].votes;
             });
           });
+          return tmppoll;
         });
         res.json(polls);
       }
