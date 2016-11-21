@@ -2,7 +2,7 @@
 <a href="#/polls/{{room}}/new" class="btn btn-default" role="button">
 	Create Your Poll
 </a>
-<div ng-repeat="poll in polls" ng-if="selection == poll.question">
+<div ng-repeat="poll in polls" ng-if="selection.question == poll.question">
 	<div class="well well-lg">
 		<strong>Question</strong><br>{{poll.question}}
 	</div>
@@ -23,9 +23,9 @@
 			<tr ng-repeat="choice in poll.choices">
 				<td>{{choice.text}}</td>
 				<td>
-					<table style="background-color: lightblue; width: {{choice.votes.length/poll.totalVotes*100}}%; text-align: right">
+					<table style="background-color: lightblue; width: {{choice.counts/poll.totalVotes*100}}%; text-align: right">
 						<tr>
-							<td>{{choice.votes.length}}</td>
+							<td>{{choice.counts}}</td>
 						</tr>
 					</table>
 				</td>

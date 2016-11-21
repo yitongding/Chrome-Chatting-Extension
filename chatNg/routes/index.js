@@ -78,7 +78,10 @@ module.exports = function (io) {
           tmppoll.choices.forEach(function (choice, choiceIdx) {
             choice.votes.forEach(function (vote, voteIdx) {
               if (vote.ip == ip) {
-                tmppoll.userChoice = choice._id;
+                tmppoll.userChoice = {
+                  _id: choice._id,
+                  text: choice.text
+                }
                 tmppoll.userVoted = true;
               }
               delete tmppoll.choices[choiceIdx].votes;
@@ -233,35 +236,36 @@ module.exports = function (io) {
 
     socket.on('vote', function (data) {
       Poll.findById(data.poll_id, function (err, poll) {
-        var choice = poll.choices.id(data.choice);
-        choice.votes.push({
-          ip: ip
-        });
-        poll.save(function (err, doc) {
-          var theDoc = {
-            question: doc.question,
-            _id: doc._id,
-            choices: [],
-            totalVotes: doc.totalVotes
-          };
-          // Loop through poll choices to determine if user has voted
-          // on this poll, and if so, what they selected
-          for (var i = 0, ln = doc.choices.length; i < ln; i++) {
-            var choice = doc.choices[i];
-            var choiceObj = {
-              text: choice.text,
-              votes: choice.votes.length
-            };
-            theDoc.choices.push(choiceObj);
-          }
-
+        
+        poll.upvote(data.choice, ip, function(newpoll){
+          var choice = poll.choices.id(data.choice);
           var myvote = {
             userVoted: true,
-            userChoice: data.choice
+            userChoice: { 
+              _id: choice._id,
+              text: choice.text
+            }
           };
 
+          var polls = newpoll.map(function(poll) {
+            var tmppoll = poll.toObject();
+            tmppoll.userVoted = false;
+            tmppoll.choices.forEach(function (choice, choiceIdx) {
+              choice.votes.forEach(function (vote, voteIdx) {
+                if (vote.ip == ip) {
+                  tmppoll.userChoice = {
+                    _id: choice._id,
+                    text: choice.text
+                  }
+                  tmppoll.userVoted = true;
+                }
+              });
+              delete tmppoll.choices[choiceIdx].votes;
+            });
+            return tmppoll;
+          });
           socket.emit('myvote', myvote);
-          socket.to(socket.room).emit('vote', theDoc);
+          socket.to(socket.room).emit('vote', polls);
         });
       });
     });
