@@ -166,12 +166,12 @@ function PollCtrl($scope, $routeParams, socket, Poll) {
 
 	socket.on('vote', function(data) {
 		console.dir(data);
-		for (poll in $scope.polls){
+		$scope.polls.forEach(function(poll, idx){
 			if (poll._id === data._id) {
-				poll.choices = data.choices;
-				poll.totalVotes = data.totalVotes;
+				polls[idx].choices = data.choices;
+				polls[idx].totalVotes = data.totalVotes;
 			}
-		}
+		});
 	});
 
 	$scope.vote = function(poll) {
