@@ -148,59 +148,6 @@ function ChatHistoryCtrl($scope, $routeParams, historyMsg) {
 	}
 }
 
-
-angular.module('chatApp').controller('NavbarCtrl',
-	function NavbarCtrl($scope, $rootScope, $routeParams, socket, ezfb) {
-
-		// $scope.room = $routeParams.room;
-		updateLoginStatus(updateApiMe);
-
-		$scope.FBlogin = function() {
-			ezfb.login(function(res) {
-				if (res.authResponse) {
-					updateLoginStatus(updateApiMe);
-				}
-			}, {
-				scope: 'public_profile'
-			});
-		}
-
-		$scope.FBlogout = function() {
-			ezfb.logout(function() {
-				updateLoginStatus(updateApiMe);
-			});
-		};
-
-		// var watchList = ['FBloginStatus', 'FBapiMe'];
-		// angular.forEach(watchList, function(varName) {
-		// 	$rootScope.$watch(varName, function(val) {
-		// 		$rootScope.$broadcast("");
-		// 	}, true);
-		// });
-
-		// Update loginStatus result
-		function updateLoginStatus(more) {
-			ezfb.getLoginStatus(function(res) {
-				$rootScope.FBloginStatus = res;
-
-				(more || angular.noop)();
-			});
-		}
-
-		// Update api('/me') result
-		function updateApiMe() {
-			ezfb.api('/me', function(res) {
-				$rootScope.FBapiMe = res;
-				socket.emit("FBlogin", {
-					name: res.name,
-					id: res.id
-				});
-			});
-		}
-
-	});
-
-
 // Controller for an individual poll
 function PollCtrl($scope, $routeParams, socket, Poll) {
 	$scope.polls = Poll.get({
@@ -299,3 +246,58 @@ function NewPollCtrl($scope, $location, $routeParams, Poll) {
 		}
 	};
 }
+
+angular.module('chatApp').controller('NavbarCtrl',
+	function NavbarCtrl($scope, $rootScope, $routeParams, socket, ezfb) {
+
+		// $scope.room = $routeParams.room;
+		updateLoginStatus(updateApiMe);
+
+		$scope.FBlogin = function() {
+			ezfb.login(function(res) {
+				if (res.authResponse) {
+					updateLoginStatus(updateApiMe);
+				}
+			}, {
+				scope: 'public_profile'
+			});
+		}
+
+		$scope.FBlogout = function() {
+			ezfb.logout(function() {
+				updateLoginStatus(updateApiMe);
+			});
+		};
+
+		// var watchList = ['FBloginStatus', 'FBapiMe'];
+		// angular.forEach(watchList, function(varName) {
+		// 	$rootScope.$watch(varName, function(val) {
+		// 		$rootScope.$broadcast("");
+		// 	}, true);
+		// });
+
+		// Update loginStatus result
+		function updateLoginStatus(more) {
+			ezfb.getLoginStatus(function(res) {
+				$rootScope.FBloginStatus = res;
+
+				(more || angular.noop)();
+			});
+		}
+
+		// Update api('/me') result
+		function updateApiMe() {
+			ezfb.api('/me', function(res) {
+				$rootScope.FBapiMe = res;
+				socket.emit("FBlogin", {
+					name: res.name,
+					id: res.id
+				});
+			});
+		}
+
+	});
+
+
+
+
