@@ -262,7 +262,7 @@ module.exports = function (io) {
               delete tmppoll.choices[choiceIdx].votes;
             });
             socket.emit('myvote', myvote);
-            socket.to(socket.room).emit('vote', polls);
+            socket.to(socket.room).emit('vote', tmppoll);
           });
         });
       });
