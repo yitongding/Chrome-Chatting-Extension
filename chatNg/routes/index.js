@@ -72,7 +72,7 @@ module.exports = function (io) {
           err: "No poll in the room"
         });
       } else {
-        var polls = room.polls.map(function(poll) {
+        var polls = room.polls.map(function (poll) {
           var tmppoll = poll.toObject();
           tmppoll.userVoted = false;
           tmppoll.choices.forEach(function (choice, choiceIdx) {
@@ -236,18 +236,17 @@ module.exports = function (io) {
 
     socket.on('vote', function (data) {
       Poll.findById(data.poll_id, function (err, poll) {
-        
-        poll.upvote(data.choice, ip, function(newpoll){
+
+        poll.upvote(data.choice, ip, function () {
           var choice = poll.choices.id(data.choice);
           var myvote = {
             userVoted: true,
-            userChoice: { 
+            userChoice: {
               _id: choice._id,
               text: choice.text
             }
           };
-
-          var polls = newpoll.map(function(poll) {
+          Poll.findById(data.poll_id, function (err, poll) {
             var tmppoll = poll.toObject();
             tmppoll.userVoted = false;
             tmppoll.choices.forEach(function (choice, choiceIdx) {
@@ -262,10 +261,9 @@ module.exports = function (io) {
               });
               delete tmppoll.choices[choiceIdx].votes;
             });
-            return tmppoll;
+            socket.emit('myvote', myvote);
+            socket.to(socket.room).emit('vote', polls);
           });
-          socket.emit('myvote', myvote);
-          socket.to(socket.room).emit('vote', polls);
         });
       });
     });
