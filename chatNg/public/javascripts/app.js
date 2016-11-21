@@ -10,15 +10,16 @@ angular.module('chatApp', ['ui.bootstrap', 'ngRoute', 'chatServices', 'ezfb'])
       templateUrl: 'partials/history.html',
       controller: ChatHistoryCtrl
     }).
+    when('/polls/:room', {
+      templateUrl: 'partials/poll.html',
+      controller: PollCtrl
+    }).
     when('/polls/:room/new', {
       templateUrl: 'partials/newpoll.html',
       controller: NewPollCtrl
     }).
-    when('/polls/:room', {
-        templateUrl: 'partials/poll.html',
-        controller: PollCtrl
-      }).
-      // If invalid route, just redirect to the main list view
+
+    // If invalid route, just redirect to the main list view
     otherwise({
       redirectTo: '/chat/' + encodeURIComponent("54.213.44.54:3000")
     });
