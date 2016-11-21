@@ -5,6 +5,7 @@ module.exports = function(io) {
   var mongoose = require('mongoose');
   var Room = mongoose.model('Room');
   var Message = mongoose.model('Message');
+  var Poll = mongoose.model('Poll');
 
   var roomUrl = null; // needed to change the socket.room
   var roomObj = null; // needed to create a message object
@@ -60,6 +61,64 @@ module.exports = function(io) {
   }
 
 
+  var fetchPolls = function(res, room) {
+    Room.findOne({
+      name: room
+    }).populate('polls').exec(function(err, room) {
+      if (err || !room) {
+        console.log(err);
+        res.json({
+          err: "No poll in the room"
+        });
+      } else {
+        var polls = [];
+        for (poll in room.polls) {
+          var pollObj = {
+            question: poll.question,
+            choices: [],
+            totalVotes: poll.totalVotes
+          };
+          for (choice in poll.choices) {
+            var choiceObj = {
+              text: choice.text,
+              votes: choice.votes.length
+            }
+            pollObj.push(choiceObj);
+          }
+          polls.push(pollObj);
+        }
+        res.json(polls);
+      }
+    });
+  }
+
+
+  var createPoll = function(req, res, room) {
+    var reqBody = req.body,
+      // Filter out choices with empty text
+      choices = reqBody.choices.filter(function(v) {
+        return v.text != '';
+      }),
+      // Build up poll object to save
+      pollObj = {
+        question: reqBody.question,
+        choices: choices
+      };
+
+    // Create poll model from built up poll object
+    var poll = new Poll(pollObj);
+
+    // Save poll to DB
+    poll.save(function(err, doc) {
+      if (err || !doc) {
+        throw 'Error';
+      } else {
+        res.json(doc);
+      }
+    });
+  }
+
+
   router.get('/chat/lastTen/:room', function(req, res, next) {
     var room = decodeURIComponent(req.params.room);
     fetchLastTen(res, room);
@@ -88,6 +147,15 @@ module.exports = function(io) {
     fetchHistory(res, room);
   });
 
+  router.get('/polls/:room', function(req, res, next) {
+    var room = decodeURIComponent(req.params.room);
+    fetchPolls(res, room);
+  });
+
+  router.post('/polls', function(req, res, next) {
+    createPoll(req, res);
+  });
+
   router.get('/', function(req, res, next) {
     res.render('index');
   });
@@ -113,7 +181,7 @@ module.exports = function(io) {
 
     socket.on('new message', function(message) {
       // log it to the Node.JS output
-      console.log("user <" + socket.username + "> message <" + message.text + "> in room <" + socket.room + "> anonymous<"+message.anonymous);
+      console.log("user <" + socket.username + "> message <" + message.text + "> in room <" + socket.room + "> anonymous<" + message.anonymous);
 
       var text = message.text;
       var username = (message.anonymous) ? "anonymous" : socket.username;
@@ -157,6 +225,42 @@ module.exports = function(io) {
             fetchTopFive(null, socket.room, socket);
           });
         });
+    });
+
+    socket.on('vote', function(data) {
+      var ip = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address.address;
+      Poll.findById(data.poll_id, function(err, poll) {
+        var choice = poll.choices.id(data.choice);
+        choice.votes.push({
+          ip: ip
+        });
+        poll.save(function(err, doc) {
+          var theDoc = {
+            question: doc.question,
+            _id: doc._id,
+            choices: [],
+            totalVotes: doc.totalVotes
+          };
+          // Loop through poll choices to determine if user has voted
+          // on this poll, and if so, what they selected
+          for (var i = 0, ln = doc.choices.length; i < ln; i++) {
+            var choice = doc.choices[i];
+            var choiceObj = {
+              text: choice.text,
+              votes: choice.votes.length
+            };
+            theDoc.choices.push(choiceObj);
+          }
+
+          var myvote = {
+            userVoted : true,
+            userChoice : data.choice
+          };
+
+          socket.emit('myvote', myvote);
+          socket.to(socket.room).emit('vote', theDoc);
+        });
+      });
     });
 
   });

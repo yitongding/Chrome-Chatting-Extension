@@ -7,7 +7,12 @@ var RoomSchema = new mongoose.Schema({
 	messages: [{
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Message'
-	}]
+	}],
+
+  polls: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Poll'
+  }]
 }, {
 	timestamps: true
 });

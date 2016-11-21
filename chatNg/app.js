@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 require('./models/Room');
 require('./models/Message');
+require('./models/Poll');
 mongoose.connect('mongodb://localhost:27017/chromeChat');
 
 var app = express();

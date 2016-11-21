@@ -200,38 +200,42 @@ angular.module('chatApp').controller('NavbarCtrl',
 
 	});
 
-/*
+
 // Controller for an individual poll
-function PollItemCtrl($scope, $routeParams, socket, Poll) {
-	$scope.poll = Poll.get({
-		pollId: $routeParams.pollId
+function PollCtrl($scope, $routeParams, socket, Poll) {
+	$scope.polls = Poll.get({
+		room: $routeParams.room
 	});
 
 	socket.on('myvote', function(data) {
 		console.dir(data);
-		if (data._id === $routeParams.pollId) {
-			$scope.poll = data;
+		for (poll in $scope.polls){
+			if (poll._id === data._id) {
+				poll.myvote = data;
+			}
 		}
 	});
 
 	socket.on('vote', function(data) {
 		console.dir(data);
-		if (data._id === $routeParams.pollId) {
-			$scope.poll.choices = data.choices;
-			$scope.poll.totalVotes = data.totalVotes;
+		for (poll in $scope.polls){
+			if (poll._id === data._id) {
+				poll.choices = data.choices;
+				poll.totalVotes = data.totalVotes;
+			}
 		}
 	});
 
-	$scope.vote = function() {
-		var pollId = $scope.poll._id,
-			choiceId = $scope.poll.userVote;
+	$scope.vote = function(poll) {
+		var pollId = poll._id,
+			choiceId = poll.userVote;
 
 		if (choiceId) {
 			var voteObj = {
 				poll_id: pollId,
 				choice: choiceId
 			};
-			socket.emit('send:vote', voteObj);
+			socket.emit('vote', voteObj);
 		} else {
 			alert('You must select an option to vote for');
 		}
@@ -239,13 +243,11 @@ function PollItemCtrl($scope, $routeParams, socket, Poll) {
 }
 
 // Controller for creating a new poll
-function PollNewCtrl($scope, $location, Poll) {
+function NewPollCtrl($scope, $location, $routeParams, Poll) {
 	// Define an empty poll model object
 	$scope.poll = {
 		question: '',
 		choices: [{
-			text: ''
-		}, {
 			text: ''
 		}, {
 			text: ''
@@ -284,7 +286,7 @@ function PollNewCtrl($scope, $location, Poll) {
 				newPoll.$save(function(p, resp) {
 					if (!p.error) {
 						// If there is no error, redirect to the main view
-						$location.path('polls');
+						$location.path('polls/'+$routeParams.room);
 					} else {
 						alert('Could not create poll');
 					}
@@ -297,4 +299,3 @@ function PollNewCtrl($scope, $location, Poll) {
 		}
 	};
 }
-*/
