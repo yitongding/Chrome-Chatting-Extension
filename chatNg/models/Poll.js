@@ -6,7 +6,11 @@ var voteSchema = new mongoose.Schema({ ip: 'String' });
 // Subdocument schema for poll choices
 var choiceSchema = new mongoose.Schema({ 
 	text: String,
-	votes: [voteSchema]
+	votes: [voteSchema],
+  counts: {
+    type: Number,
+    default: 0
+  }
 });
 
 // Document schema for polls
@@ -30,6 +34,7 @@ var PollSchema = new mongoose.Schema({
 
 PollSchema.methods.upvote = function(choiceId, IP, callback) {
   var choice = this.choices.id(choiceId);
+  choice.counts += 1;
   choice.votes.push({ip: IP});
   this.totalVotes += 1;
   this.save(callback);

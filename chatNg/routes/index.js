@@ -1,4 +1,4 @@
-module.exports = function(io) {
+module.exports = function (io) {
   var app = require('express');
   var router = app.Router();
 
@@ -10,7 +10,7 @@ module.exports = function(io) {
   var roomUrl = null; // needed to change the socket.room
   var roomObj = null; // needed to create a message object
 
-  var fetchLastTen = function(res, room) {
+  var fetchLastTen = function (res, room) {
     var newRoomObj = {
       name: room,
       host: null
@@ -21,7 +21,7 @@ module.exports = function(io) {
     }, newRoomObj, {
       upsert: true,
       new: true
-    }).populate('messages').exec(function(err, newRoom) {
+    }).populate('messages').exec(function (err, newRoom) {
       if (err) console.log(err);
       roomObj = newRoom; // room object for message storage
 
@@ -30,12 +30,12 @@ module.exports = function(io) {
     });
   };
 
-  var fetchTopFive = function(res, room, socket) {
+  var fetchTopFive = function (res, room, socket) {
     Message.find({
         room: roomObj
       })
       .sort('-upvotes')
-      .exec(function(err, messages) {
+      .exec(function (err, messages) {
         if (socket)
           socket.emit("top five", messages.slice(0, 5));
         // res.json(messages.slice(0, 5));
@@ -45,10 +45,10 @@ module.exports = function(io) {
   };
 
 
-  var fetchHistory = function(res, room, socket) {
+  var fetchHistory = function (res, room, socket) {
     Room.findOne({
       name: room
-    }).populate('messages').exec(function(err, room) {
+    }).populate('messages').exec(function (err, room) {
       if (err || !room) {
         console.log(err);
         res.json({
@@ -61,85 +61,84 @@ module.exports = function(io) {
   }
 
 
-  var fetchPolls = function(res, room) {
+  var fetchPolls = function (res, room) {
+    var ip = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address.address;
     Room.findOne({
       name: room
-    }).populate('polls').exec(function(err, room) {
+    }).populate('polls').exec(function (err, room) {
       if (err || !room) {
         console.log(err);
         res.json({
           err: "No poll in the room"
         });
       } else {
-        var polls = [];
-        for (poll in room.polls) {
-          var pollObj = {
-            question: poll.question,
-            choices: [],
-            totalVotes: poll.totalVotes
-          };
-          for (choice in poll.choices) {
-            var choiceObj = {
-              text: choice.text,
-              votes: choice.votes.length
-            }
-            pollObj.push(choiceObj);
-          }
-          polls.push(pollObj);
-        }
-        res.json(polls);
+        room.polls.forEach(function (poll) {
+          poll.choices.forEach(function (choice) {
+            choice.votes.forEach(function (vote) {
+              if (vote.ip == ip) {
+                poll.userChoice = choice._id;
+              }
+              delete poll.votes;
+            });
+          });
+        });
+        res.json(room.polls);
       }
     });
   }
 
 
-  var createPoll = function(req, res, room) {
+  var createPoll = function (req, res, room) {
     var reqBody = req.body,
       // Filter out choices with empty text
-      choices = reqBody.choices.filter(function(v) {
+      choices = reqBody.choices.filter(function (v) {
         return v.text != '';
       }),
       // Build up poll object to save
       pollObj = {
         question: reqBody.question,
-        choices: choices
+        choices: choices,
+        room: roomObj
       };
-
+    console.log(pollObj);
     // Create poll model from built up poll object
     var poll = new Poll(pollObj);
 
     // Save poll to DB
-    poll.save(function(err, doc) {
+    poll.save(function (err, doc) {
       if (err || !doc) {
         throw 'Error';
       } else {
-        res.json(doc);
+        roomObj.polls.push(poll);
+        roomObj.save(function (err, roomObj) {
+          res.json(doc);
+        });
       }
     });
   }
 
 
-  router.get('/chat/lastTen/:room', function(req, res, next) {
+  router.get('/chat/lastTen/:room', function (req, res, next) {
     var room = decodeURIComponent(req.params.room);
     fetchLastTen(res, room);
   });
 
-  router.get('/chat/topFive/:room', function(req, res, next) {
+  router.get('/chat/topFive/:room', function (req, res, next) {
     var room = decodeURIComponent(req.params.room);
     fetchTopFive(res, room, null);
   });
 
-  router.get('/chat/:room', function(req, res, next) {
+  router.get('/chat/:room', function (req, res, next) {
     roomUrl = decodeURIComponent(req.params.room);
     res.json();
   });
 
-  router.get('/chat/', function(req, res, next) {
+  router.get('/chat/', function (req, res, next) {
     roomUrl = '54.213.44.54:3000';
     res.json();
   });
 
-  router.get('/history/:room', function(req, res, next) {
+  router.get('/history/:room', function (req, res, next) {
     var room = decodeURIComponent(req.params.room);
     if (typeof room == undefined) {
       room = "54.213.44.54:3000";
@@ -147,39 +146,39 @@ module.exports = function(io) {
     fetchHistory(res, room);
   });
 
-  router.get('/polls/:room', function(req, res, next) {
+  router.get('/polls/:room', function (req, res, next) {
     var room = decodeURIComponent(req.params.room);
     fetchPolls(res, room);
   });
 
-  router.post('/polls', function(req, res, next) {
+  router.post('/polls', function (req, res, next) {
     createPoll(req, res);
   });
 
-  router.get('/', function(req, res, next) {
+  router.get('/', function (req, res, next) {
     res.render('index');
   });
 
 
 
-  io.sockets.on('connection', function(socket) {
+  io.sockets.on('connection', function (socket) {
 
     // send estabilish message on connection
     socket.emit('established', "connection established");
 
-    socket.on("room url", function(room) {
+    socket.on("room url", function (room) {
       socket.room = room;
       socket.join(room);
     });
 
-    socket.on("FBlogin", function(data) {
+    socket.on("FBlogin", function (data) {
       socket.username = data.name;
       socket.FBid = data.id;
       console.log("user: <" + socket.id + "> login with FB <" + data.name + ">");
     });
 
 
-    socket.on('new message', function(message) {
+    socket.on('new message', function (message) {
       // log it to the Node.JS output
       console.log("user <" + socket.username + "> message <" + message.text + "> in room <" + socket.room + "> anonymous<" + message.anonymous);
 
@@ -194,10 +193,10 @@ module.exports = function(io) {
         room: roomObj
       });
 
-      messageObj.save(function(err) {
+      messageObj.save(function (err) {
         if (err) console.log(err);
         roomObj.messages.push(messageObj);
-        roomObj.save(function(err, roomObj) {
+        roomObj.save(function (err, roomObj) {
           if (err) console.log(err);
           // broadcast message to the room
           console.log('ready to send message');
@@ -214,12 +213,12 @@ module.exports = function(io) {
     });
 
 
-    socket.on('likeMsg', function(data) {
+    socket.on('likeMsg', function (data) {
       Message.findById(
         data.msgId,
-        function(err, message) {
+        function (err, message) {
           if (err) console.log(err);
-          message.upvote(function() {
+          message.upvote(function () {
             console.log('user <' + socket.username + '> liked <' + message.message + '>');
             io.to(socket.room).emit('likeMsg', message);
             fetchTopFive(null, socket.room, socket);
@@ -227,14 +226,14 @@ module.exports = function(io) {
         });
     });
 
-    socket.on('vote', function(data) {
+    socket.on('vote', function (data) {
       var ip = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address.address;
-      Poll.findById(data.poll_id, function(err, poll) {
+      Poll.findById(data.poll_id, function (err, poll) {
         var choice = poll.choices.id(data.choice);
         choice.votes.push({
           ip: ip
         });
-        poll.save(function(err, doc) {
+        poll.save(function (err, doc) {
           var theDoc = {
             question: doc.question,
             _id: doc._id,
@@ -253,8 +252,8 @@ module.exports = function(io) {
           }
 
           var myvote = {
-            userVoted : true,
-            userChoice : data.choice
+            userVoted: true,
+            userChoice: data.choice
           };
 
           socket.emit('myvote', myvote);
