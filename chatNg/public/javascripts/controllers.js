@@ -157,8 +157,8 @@ function PollCtrl($scope, $routeParams, socket, Poll) {
 	socket.on('myvote', function(data) {
 		$scope.polls.forEach(function(poll, idx){
 			if (poll._id === data._id) {
-				polls[idx].userVoted = data.userVoted;
-				polls[idx].userChoice = data.userChoice;
+				$scope.polls[idx].userVoted = data.userVoted;
+				$scope.polls[idx].userChoice = data.userChoice;
 			}
 		});
 	});
@@ -166,8 +166,8 @@ function PollCtrl($scope, $routeParams, socket, Poll) {
 	socket.on('vote', function(data) {
 		$scope.polls.forEach(function(poll, idx){
 			if (poll._id === data._id) {
-				polls[idx].choices = data.choices;
-				polls[idx].totalVotes = data.totalVotes;
+				$scope.polls[idx].choices = data.choices;
+				$scope.polls[idx].totalVotes = data.totalVotes;
 			}
 		});
 	});
