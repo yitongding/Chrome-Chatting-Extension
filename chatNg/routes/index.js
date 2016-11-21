@@ -8,7 +8,8 @@ module.exports = function (io) {
   var Poll = mongoose.model('Poll');
 
   var roomUrl = null; // needed to change the socket.room
-  var roomObj = null; // needed to create a message object
+  var roomObj = null; // needed to create a message object\
+  var ip = null;
 
   var fetchLastTen = function (res, room) {
     var newRoomObj = {
@@ -62,7 +63,6 @@ module.exports = function (io) {
 
 
   var fetchPolls = function (res, room) {
-    var ip = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address.address;
     Room.findOne({
       name: room
     }).populate('polls').exec(function (err, room) {
@@ -169,6 +169,7 @@ module.exports = function (io) {
     socket.on("room url", function (room) {
       socket.room = room;
       socket.join(room);
+      ip = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address.address;
     });
 
     socket.on("FBlogin", function (data) {
@@ -227,7 +228,6 @@ module.exports = function (io) {
     });
 
     socket.on('vote', function (data) {
-      var ip = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address.address;
       Poll.findById(data.poll_id, function (err, poll) {
         var choice = poll.choices.id(data.choice);
         choice.votes.push({
