@@ -72,19 +72,20 @@ module.exports = function (io) {
           err: "No poll in the room"
         });
       } else {
-        room.polls.forEach(function (poll, pollIdx) {
-          room.polls[pollIdx].userVoted = false;
+        var polls = room.polls;
+        polls.forEach(function (poll, pollIdx) {
+          polls[pollIdx].userVoted = false;
           poll.choices.forEach(function (choice, choiceIdx) {
             choice.votes.forEach(function (vote, voteIdx) {
               if (vote.ip == ip) {
-                room.polls[pollIdx].userChoice = choice._id;
-                room.polls[pollIdx].userVoted = true;
+                polls[pollIdx].userChoice = choice._id;
+                polls[pollIdx].userVoted = true;
               }
-              delete room.polls[pollIdx].choices[choiceIdx].votes;
+              delete polls[pollIdx].choices[choiceIdx].votes;
             });
           });
         });
-        res.json(room.polls);
+        res.json(polls);
       }
     });
   }
