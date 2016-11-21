@@ -158,7 +158,8 @@ function PollCtrl($scope, $routeParams, socket, Poll) {
 		console.dir(data);
 		for (poll in $scope.polls){
 			if (poll._id === data._id) {
-				poll.myvote = data;
+				poll.userVoted = data.userVoted;
+				poll.userChoice = data.userChoice;
 			}
 		}
 	});

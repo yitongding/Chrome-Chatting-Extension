@@ -240,6 +240,7 @@ module.exports = function (io) {
         poll.upvote(data.choice, ip, function () {
           var choice = poll.choices.id(data.choice);
           var myvote = {
+            _id: poll._id,
             userVoted: true,
             userChoice: {
               _id: choice._id,
