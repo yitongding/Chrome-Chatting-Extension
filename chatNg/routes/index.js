@@ -74,9 +74,11 @@ module.exports = function (io) {
       } else {
         room.polls.forEach(function (poll) {
           poll.choices.forEach(function (choice) {
+            poll.userVoted = false;
             choice.votes.forEach(function (vote) {
               if (vote.ip == ip) {
                 poll.userChoice = choice._id;
+                poll.userVoted = true;
               }
               delete poll.votes;
             });
