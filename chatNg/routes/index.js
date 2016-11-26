@@ -63,7 +63,7 @@ module.exports = function (io) {
   }
 
 
-  var fetchPoll = function (res, pollId) {
+  var fetchPoll = function (res, room, pollId) {
     Poll.findById(pollId, function (err, poll) {
       if (err || !poll) {
         console.log(err);
