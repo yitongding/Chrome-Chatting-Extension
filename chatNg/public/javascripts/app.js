@@ -10,7 +10,7 @@ angular.module('chatApp', ['ui.bootstrap', 'ngRoute', 'chatServices', 'ezfb'])
       templateUrl: 'partials/history.html',
       controller: ChatHistoryCtrl
     }).
-    when('/polls/:room/:poll', {
+    when('/polls/:room/:pollId', {
       templateUrl: 'partials/poll.html',
       controller: PollCtrl
     }).

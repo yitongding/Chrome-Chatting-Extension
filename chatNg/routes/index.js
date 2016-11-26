@@ -64,8 +64,8 @@ module.exports = function (io) {
 
 
   var fetchPoll = function (res, pollId) {
-    Poll.findById(pollId, function(err, poll) {
-      if (err || ! poll) {
+    Poll.findById(pollId, function (err, poll) {
+      if (err || !poll) {
         console.log(err);
         res.json({
           err: "No poll in the room"
@@ -151,8 +151,10 @@ module.exports = function (io) {
   }
 
 
-  var fetchPollsList = function(res, room) {
-    Poll.find({room: roomObj}, 'question', function(err, polls) {
+  var fetchPollsList = function (res, room) {
+    Poll.find({
+      room: roomObj
+    }, 'question', function (err, polls) {
       res.json(polls);
     });
   };
@@ -185,16 +187,18 @@ module.exports = function (io) {
     fetchHistory(res, room);
   });
 
+  router.get('/polls/:room/polls', function (req, res, next) {
+    var room = decodeURIComponent(req.params.room);
+    fetchPollsList(res, room);
+  });
+
   router.get('/polls/:room/:poll', function (req, res, next) {
     var room = decodeURIComponent(req.params.room),
       poll = decodeURIComponent(req.params.poll);
     fetchPoll(res, room, poll);
   });
 
-  router.get('/polls/:room/polls', function (req, res, next) {
-    var room = decodeURIComponent(req.params.room);
-    fetchPollsList(res, room);
-  });
+
 
   router.post('/polls', function (req, res, next) {
     createPoll(req, res);

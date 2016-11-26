@@ -131,7 +131,7 @@ function ChatHistoryCtrl($scope, $routeParams, historyMsg) {
 function PollCtrl($scope, $routeParams, socket, Poll) {
 	$scope.poll = Poll.get({
 		room: $routeParams.room,
-		pollId: $routeParams.poll
+		pollId: $routeParams.pollId
 	});
 
 	socket.on('myvote', function (data) {
