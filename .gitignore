@@ -21,6 +21,7 @@
 *.zip
 
 node_modules
+bower_modules
 
 # Logs and databases #
 ######################

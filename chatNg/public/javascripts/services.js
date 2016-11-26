@@ -1,6 +1,6 @@
 // Angular service module for connecting to JSON APIs
 angular.module('chatServices', ['ngResource']).
-factory('lastTenMsg', function($resource) {
+factory('lastTenMsg', function ($resource) {
 	return $resource('chat/lastTen/:room', {}, {
 		'get': {
 			method: 'GET',
@@ -8,7 +8,7 @@ factory('lastTenMsg', function($resource) {
 		}
 	})
 }).
-factory('topFiveMsg', function($resource) {
+factory('topFiveMsg', function ($resource) {
 	return $resource('chat/topFive/:room', {}, {
 		'get': {
 			method: 'GET',
@@ -16,7 +16,7 @@ factory('topFiveMsg', function($resource) {
 		}
 	})
 }).
-factory('historyMsg', function($resource) {
+factory('historyMsg', function ($resource) {
 	return $resource('history/:room', {}, {
 		'get': {
 			method: 'GET',
@@ -24,30 +24,33 @@ factory('historyMsg', function($resource) {
 		}
 	})
 }).
-factory('Poll', function($resource) {
-	return $resource('polls/:room', {}, {
+factory('Poll', function ($resource) {
+	return $resource('polls/:room/:pollId', {}, {
 		// Use this method for getting a list of polls
-		'get': {
+		query: {
 			method: 'GET',
+			params: {
+				pollId: 'polls'
+			},
 			isArray: true
 		}
 	})
 }).
-factory('socket', function($rootScope) {
+factory('socket', function ($rootScope) {
 	var socket = io.connect();
 	return {
-		on: function(eventName, callback) {
-			socket.on(eventName, function() {
+		on: function (eventName, callback) {
+			socket.on(eventName, function () {
 				var args = arguments;
-				$rootScope.$apply(function() {
+				$rootScope.$apply(function () {
 					callback.apply(socket, args);
 				});
 			});
 		},
-		emit: function(eventName, data, callback) {
-			socket.emit(eventName, data, function() {
+		emit: function (eventName, data, callback) {
+			socket.emit(eventName, data, function () {
 				var args = arguments;
-				$rootScope.$apply(function() {
+				$rootScope.$apply(function () {
 					if (callback) {
 						callback.apply(socket, args);
 					}

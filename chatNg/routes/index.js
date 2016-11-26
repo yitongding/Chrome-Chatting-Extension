@@ -10,6 +10,7 @@ module.exports = function (io) {
   var roomUrl = null; // needed to change the socket.room
   var roomObj = null; // needed to create a message object\
   var ip = null;
+  var FBid = null;
 
   var fetchLastTen = function (res, room) {
     var newRoomObj = {
@@ -62,36 +63,60 @@ module.exports = function (io) {
   }
 
 
-  var fetchPolls = function (res, room) {
-    Room.findOne({
-      name: room
-    }).populate('polls').exec(function (err, room) {
-      if (err || !room) {
+  var fetchPoll = function (res, pollId) {
+    Poll.findById(pollId, function(err, poll) {
+      if (err || ! poll) {
         console.log(err);
         res.json({
           err: "No poll in the room"
         });
       } else {
-        var polls = room.polls.map(function (poll) {
-          var tmppoll = poll.toObject();
-          tmppoll.userVoted = false;
-          tmppoll.choices.forEach(function (choice, choiceIdx) {
-            choice.votes.forEach(function (vote, voteIdx) {
-              if (vote.ip == ip) {
-                tmppoll.userChoice = {
-                  _id: choice._id,
-                  text: choice.text
-                }
-                tmppoll.userVoted = true;
+        var tmppoll = poll.toObject();
+        tmppoll.userVoted = false;
+        tmppoll.choices.forEach(function (choice, choiceIdx) {
+          choice.votes.forEach(function (vote, voteIdx) {
+            if (vote.ip == ip) {
+              tmppoll.userChoice = {
+                _id: choice._id,
+                text: choice.text
               }
-              delete tmppoll.choices[choiceIdx].votes;
-            });
+              tmppoll.userVoted = true;
+            }
+            delete tmppoll.choices[choiceIdx].votes;
           });
-          return tmppoll;
         });
-        res.json(polls);
+        res.json(tmppoll);
       }
     });
+    // Room.findOne({
+    //   name: room
+    // }).populate('polls').exec(function (err, room) {
+    //   if (err || !room) {
+    //     console.log(err);
+    //     res.json({
+    //       err: "No poll in the room"
+    //     });
+    //   } else {
+    //     var polls = room.polls.map(function (poll) {
+    //       var tmppoll = poll.toObject();
+    //       tmppoll.userVoted = false;
+    //       tmppoll.choices.forEach(function (choice, choiceIdx) {
+    //         choice.votes.forEach(function (vote, voteIdx) {
+    //           if (vote.ip == ip) {
+    //             tmppoll.userChoice = {
+    //               _id: choice._id,
+    //               text: choice.text
+    //             }
+    //             tmppoll.userVoted = true;
+    //           }
+    //           delete tmppoll.choices[choiceIdx].votes;
+    //         });
+    //       });
+    //       return tmppoll;
+    //     });
+    //     res.json(polls);
+    //   }
+    // });
   }
 
 
@@ -105,7 +130,8 @@ module.exports = function (io) {
       pollObj = {
         question: reqBody.question,
         choices: choices,
-        room: roomObj
+        room: roomObj,
+        host: FBid
       };
     console.log(pollObj);
     // Create poll model from built up poll object
@@ -124,6 +150,12 @@ module.exports = function (io) {
     });
   }
 
+
+  var fetchPollsList = function(res, room) {
+    Poll.find({room: roomObj}, 'question', function(err, polls) {
+      res.json(polls);
+    });
+  };
 
   router.get('/chat/lastTen/:room', function (req, res, next) {
     var room = decodeURIComponent(req.params.room);
@@ -153,9 +185,15 @@ module.exports = function (io) {
     fetchHistory(res, room);
   });
 
-  router.get('/polls/:room', function (req, res, next) {
+  router.get('/polls/:room/:poll', function (req, res, next) {
+    var room = decodeURIComponent(req.params.room),
+      poll = decodeURIComponent(req.params.poll);
+    fetchPoll(res, room, poll);
+  });
+
+  router.get('/polls/:room/polls', function (req, res, next) {
     var room = decodeURIComponent(req.params.room);
-    fetchPolls(res, room);
+    fetchPollsList(res, room);
   });
 
   router.post('/polls', function (req, res, next) {
@@ -182,6 +220,7 @@ module.exports = function (io) {
     socket.on("FBlogin", function (data) {
       socket.username = data.name;
       socket.FBid = data.id;
+      FBid = data.id;
       console.log("user: <" + socket.id + "> login with FB <" + data.name + ">");
     });
 

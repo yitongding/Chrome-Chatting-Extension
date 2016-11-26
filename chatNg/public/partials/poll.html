@@ -1,41 +1,50 @@
-<select class="form-control" ng-model="selection" ng-options="p.question for p in polls"></select>
 <a href="#/polls/{{room}}/new" class="btn btn-default" role="button">
-	Create Your Poll
+	Create New Poll
 </a>
-<div ng-repeat="poll in polls" ng-if="selection.question == poll.question">
-	<div class="well well-lg">
-		<strong>Question</strong><br>{{poll.question}}
+<div ng-show="poll.host == FBapiMe.id">
+	<span>You are the host.</span>
+	<a href="." class="btn btn-default" role="button" ng-click="closePoll(poll)" ng-if="!poll.closed">
+		Close This Poll
+	</a>
+	<a href="." class="btn btn-default" role="button" ng-click="openPoll(poll)" ng-if="poll.closed">
+		Re-open This Poll
+	</a>
+</div>
+<div ng-if="poll.closed">
+	<p>This poll was closed by the host. You can view the result. </p>
+</div>
+<div class="well well-lg">
+	<strong>Question</strong><br>{{poll.question}}
+</div>
+<div ng-hide="poll.userVoted || poll.closed ">
+	<p class="lead">Please select one of the following options:</p>
+	<div ng-repeat="choice in poll.choices" class="radio">
+		<label>
+			<input type="radio" name="choice" ng-model="poll.userVote" value="{{choice._id}}">
+			{{choice.text}}
+		</label>
 	</div>
-	<div ng-hide="poll.userVoted">
-		<p class="lead">Please select one of the following options:</p>
-		<div ng-repeat="choice in poll.choices" class="radio">
-			<label>
-					<input type="radio" name="choice" ng-model="poll.userVote" value="{{choice._id}}">
-					{{choice.text}}
-				</label>
-		</div>
-		<div>
-			<button class="btn btn-primary pull-right" ng-click='vote(poll)'>Vote &raquo;</button>
-		</div>
+	<div>
+		<button class="btn btn-primary pull-right" ng-click='vote(poll)'>Vote &raquo;</button>
 	</div>
-	<div ng-show="poll.userVoted">
-		<table class="result-table">
-			<tr ng-repeat="choice in poll.choices">
-				<td>{{choice.text}}</td>
-				<td>
-					<table style="background-color: lightblue; width: {{choice.counts/poll.totalVotes*100}}%; text-align: right">
-						<tr>
-							<td>{{choice.counts}}</td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-		</table>
-		<p>
-			<em>
-					{{poll.totalVotes}} votes counted so far.
-					<span ng-show="poll.userChoice">You voted for <strong>{{poll.userChoice.text}}</strong>.</span>
-				</em>
-		</p>
-	</div>
+</div>
+<div ng-show="poll.userVoted || poll.closed">
+	<table class="result-table">
+		<tr ng-repeat="choice in poll.choices">
+			<td>{{choice.text}}</td>
+			<td>
+				<table style="background-color: lightblue; width: {{choice.counts/poll.totalVotes*100}}%; text-align: right">
+					<tr>
+						<td>{{choice.counts}}</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	<p>
+		<em>
+			{{poll.totalVotes}} votes counted so far.
+			<span ng-show="poll.userChoice">You voted for <strong>{{poll.userChoice.text}}</strong>.</span>
+		</em>
+	</p>
 </div>

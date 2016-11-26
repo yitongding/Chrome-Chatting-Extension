@@ -13,53 +13,39 @@ function ChatMsgCtrl($scope, $rootScope, $routeParams, socket, lastTenMsg, topFi
 		room: $routeParams.room
 	});
 
-	// check FB login status
-	// updateLoginStatus();
-
-	// add listener on FB login status
-	// var watchList = ['FBloginStatus', 'FBapiMe'];
-	// angular.forEach(watchList, function(varName) {
-	// 	$scope.$watch(varName, function(val) {
-	// 		$rootScope.$broadcast("");
-	// 	}, true);
-	// });
-
-	socket.on('established', function(data) {
+	socket.on('established', function (data) {
 		console.log(data);
 		socket.emit('room url', $routeParams.room);
 	});
 
-	socket.on('new message', function(data) {
+	socket.on('new message', function (data) {
 		if ($scope.blockList.indexOf(data.FBid) == -1) {
 			$scope.messages.push(data);
 		}
 	});
 
-	socket.on("likeMsg", function(message) {
-		var idx = $scope.messages.findIndex(function(el) {
+	socket.on("likeMsg", function (message) {
+		var idx = $scope.messages.findIndex(function (el) {
 			if (el._id == message._id) return true;
 			else return false;
 		});
 		if (idx != -1)
 			$scope.messages[idx].upvotes = message.upvotes;
-		idx = $scope.lastTenMsg.findIndex(function(el) {
+		idx = $scope.lastTenMsg.findIndex(function (el) {
 			if (el._id == message._id) return true;
 			else return false;
 		});
 		if (idx != -1)
 			$scope.lastTenMsg[idx].upvotes = message.upvotes;
 
-		// $scope.topFives = topFiveMsg.get({
-		// 	room: $routeParams.room
-		// });
 	});
 
-	socket.on("top five", function(messages) {
+	socket.on("top five", function (messages) {
 		$scope.topFives = messages;
 	});
 
 
-	$scope.likeMsg = function(message) {
+	$scope.likeMsg = function (message) {
 		message.likeBtn = true;
 		var room = $routeParams.room,
 			msgId = message._id;
@@ -70,7 +56,7 @@ function ChatMsgCtrl($scope, $rootScope, $routeParams, socket, lastTenMsg, topFi
 		socket.emit('likeMsg', likeObj);
 	};
 
-	$scope.block = function(message) {
+	$scope.block = function (message) {
 		message.blockBtn = true;
 		var FBid = message.FBid;
 		$scope.blockList.push(FBid);
@@ -86,11 +72,11 @@ function ChatMsgCtrl($scope, $rootScope, $routeParams, socket, lastTenMsg, topFi
 		});
 	};
 
-	$scope.closeAlert = function() {
+	$scope.closeAlert = function () {
 		$scope.alerts.splice(index, 1);
 	};
 
-	$scope.undoBlock = function() {
+	$scope.undoBlock = function () {
 		$scope.alerts.splice(index, 1);
 		$scope.blockList.pop();
 		$scope.alerts.push({
@@ -121,15 +107,8 @@ function ChatMsgCtrl($scope, $rootScope, $routeParams, socket, lastTenMsg, topFi
 		}
 	}
 
-	// function updateLoginStatus(more) {
-	// 	ezfb.getLoginStatus(function(res) {
-	// 		$scope.FBloginStatus = res;
 
-	// 		(more || angular.noop)();
-	// 	});
-	// }
-
-	$(window).keydown(function(event) {
+	$(window).keydown(function (event) {
 		// When the client hits ENTER on their keyboard 
 		if (event.which === 13) {
 			sendMessage();
@@ -143,36 +122,45 @@ function ChatHistoryCtrl($scope, $routeParams, historyMsg) {
 		room: $routeParams.room
 	});
 
-	$scope.back = function() {
+	$scope.back = function () {
 		window.history.back();
 	}
 }
 
 // Controller for an individual poll
 function PollCtrl($scope, $routeParams, socket, Poll) {
-	$scope.polls = Poll.get({
-		room: $routeParams.room
+	$scope.poll = Poll.get({
+		room: $routeParams.room,
+		pollId: $routeParams.poll
 	});
 
-	socket.on('myvote', function(data) {
-		$scope.polls.forEach(function(poll, idx){
-			if (poll._id === data._id) {
-				$scope.polls[idx].userVoted = data.userVoted;
-				$scope.polls[idx].userChoice = data.userChoice;
-			}
-		});
+	socket.on('myvote', function (data) {
+		if ($scope.poll._id === data._id) {
+			$scope.poll.userVoted = data.userVoted;
+			$scope.poll.userChoice = data.userChoice;
+		}
 	});
 
-	socket.on('vote', function(data) {
-		$scope.polls.forEach(function(poll, idx){
-			if (poll._id === data._id) {
-				$scope.polls[idx].choices = data.choices;
-				$scope.polls[idx].totalVotes = data.totalVotes;
-			}
-		});
+	socket.on('vote', function (data) {
+		if ($scope.poll._id === data._id) {
+			$scope.poll.choices = data.choices;
+			$scope.poll.totalVotes = data.totalVotes;
+		}
 	});
 
-	$scope.vote = function(poll) {
+	socket.on('close vote', function(data) {
+		if (data== $scope.poll._id) {
+			$scope.poll.closed = true;
+		}
+	});
+
+	socket.on('open vote', function(data) {
+		if (data== $scope.poll._id) {
+			$scope.poll.closed = false;
+		}
+	});
+
+	$scope.vote = function (poll) {
 		var pollId = poll._id,
 			choiceId = poll.userVote;
 
@@ -186,6 +174,24 @@ function PollCtrl($scope, $routeParams, socket, Poll) {
 			alert('You must select an option to vote for');
 		}
 	};
+
+	$scope.closePoll = function (poll) {
+		var pollId = poll._id;
+		socket.emit("close poll", pollId);
+	};
+
+	$scope.openPoll = function (poll) {
+		var pollId = poll._id;
+		socket.emit("open poll", pollId);
+	};
+};
+
+
+function PollListCtrl($scope, $routeParams, Poll) {
+	$scope.room = $routeParams.room;
+	$scope.polls = Poll.query({
+		room: $routeParams.room
+	});
 };
 
 // Controller for creating a new poll
@@ -201,14 +207,14 @@ function NewPollCtrl($scope, $location, $routeParams, Poll) {
 	};
 
 	// Method to add an additional choice option
-	$scope.addChoice = function() {
+	$scope.addChoice = function () {
 		$scope.poll.choices.push({
 			text: ''
 		});
 	};
 
 	// Validate and save the new poll to the database
-	$scope.createPoll = function() {
+	$scope.createPoll = function () {
 		var poll = $scope.poll;
 
 		// Check that a question was provided
@@ -229,10 +235,10 @@ function NewPollCtrl($scope, $location, $routeParams, Poll) {
 				var newPoll = new Poll(poll);
 
 				// Call API to save poll to the database
-				newPoll.$save(function(p, resp) {
+				newPoll.$save(function (p, resp) {
 					if (!p.error) {
 						// If there is no error, redirect to the main view
-						$location.path('polls/'+$routeParams.room);
+						$location.path('polls/' + $routeParams.room);
 					} else {
 						alert('Could not create poll');
 					}
@@ -252,8 +258,8 @@ angular.module('chatApp').controller('NavbarCtrl',
 		// $scope.room = $routeParams.room;
 		updateLoginStatus(updateApiMe);
 
-		$scope.FBlogin = function() {
-			ezfb.login(function(res) {
+		$scope.FBlogin = function () {
+			ezfb.login(function (res) {
 				if (res.authResponse) {
 					updateLoginStatus(updateApiMe);
 				}
@@ -262,8 +268,8 @@ angular.module('chatApp').controller('NavbarCtrl',
 			});
 		}
 
-		$scope.FBlogout = function() {
-			ezfb.logout(function() {
+		$scope.FBlogout = function () {
+			ezfb.logout(function () {
 				updateLoginStatus(updateApiMe);
 			});
 		};
@@ -277,7 +283,7 @@ angular.module('chatApp').controller('NavbarCtrl',
 
 		// Update loginStatus result
 		function updateLoginStatus(more) {
-			ezfb.getLoginStatus(function(res) {
+			ezfb.getLoginStatus(function (res) {
 				$rootScope.FBloginStatus = res;
 
 				(more || angular.noop)();
@@ -286,7 +292,7 @@ angular.module('chatApp').controller('NavbarCtrl',
 
 		// Update api('/me') result
 		function updateApiMe() {
-			ezfb.api('/me', function(res) {
+			ezfb.api('/me', function (res) {
 				$rootScope.FBapiMe = res;
 				socket.emit("FBlogin", {
 					name: res.name,
@@ -296,7 +302,3 @@ angular.module('chatApp').controller('NavbarCtrl',
 		}
 
 	});
-
-
-
-
