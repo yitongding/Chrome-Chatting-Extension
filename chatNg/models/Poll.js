@@ -31,6 +31,8 @@ var PollSchema = new mongoose.Schema({
     default: Date.now,
     expires: '7d'
   }
+}, {
+  timestamps: true
 });
 
 PollSchema.methods.upvote = function(choiceId, IP, callback) {

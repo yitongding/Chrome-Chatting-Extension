@@ -13,10 +13,15 @@
     <ul ng-switch-when="0">
         <li><em>No polls in databases. Would you like to <a href="#/new">create one</a>?</li>
 	</ul>
-	<ul ng-switch-default>
-		<li ng-repeat="poll in polls | filter:query">
-			<a href="#/polls/{{room}}/{{poll._id}}">{{poll.question}}</a>
-		</li>
-	</ul>
+	<table class="table table-striped" ng-switch-default>
+        <tr>
+            <td>Question</td>
+            <td>Create Time</td>
+        </tr>
+		<tr ng-repeat="poll in polls | filter:query">
+            <td><a href="#/polls/{{room}}/{{poll._id}}">{{poll.question}}</a></td>
+            <td>{{poll.createdAt}}</td>
+		</tr>
+	</table>
 </div>
 <p>&nbsp;</p>
