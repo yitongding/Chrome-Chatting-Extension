@@ -15,7 +15,7 @@
 	</ul>
 	<ul ng-switch-default>
 		<li ng-repeat="poll in polls | filter:query">
-			<a href="#/poll/{{room}}/{{poll._id}}">{{poll.question}}</a>
+			<a href="#/polls/{{room}}/{{poll._id}}">{{poll.question}}</a>
 		</li>
 	</ul>
 </div>
