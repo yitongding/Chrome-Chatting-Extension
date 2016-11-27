@@ -134,6 +134,14 @@ function PollCtrl($scope, $routeParams, socket, Poll) {
 		pollId: $routeParams.pollId
 	});
 
+	$scope.chartLabels = $scope.poll.choices.map(function(choice){
+		return choice.text;
+	});
+
+	$scope.chartData = $scope.poll.choices.map(function(choice){
+		return choice.counts;
+	});
+
 	socket.on('myvote', function (data) {
 		if ($scope.poll._id === data._id) {
 			$scope.poll.userVoted = data.userVoted;

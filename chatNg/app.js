@@ -33,6 +33,8 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
+app.use('/node_modules',  express.static(__dirname + '/node_modules'));
+
 // Handle Errors gracefully
 app.use(function(err, req, res, next) {
 	if(!err) return next();
