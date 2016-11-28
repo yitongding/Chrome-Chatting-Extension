@@ -217,7 +217,7 @@ module.exports = function (io) {
 
     socket.on("room url", function (room) {
       socket.room = room;
-      console.log("user join room <"+room+">");
+      console.log("<"+socket.id+"> join room <"+room+">");
       socket.join(room);
       ip = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address.address;
     });
