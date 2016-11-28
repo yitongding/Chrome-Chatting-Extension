@@ -64,7 +64,7 @@ function createBulletBar(url, option) {
 	var bulletbar = document.createElement('div');
 	var hashUrl = url.split("?")[0].split("#")[0].hashCode();
 	bulletbar.id = "myBulletbar";
-	bulletbar.innerHTML = `<iframe width="100%" height="100%" src="http://54.213.44.54:3000/public/dm/dm?room=`+hashUrl+`" frameborder="0" allowfullscreen></iframe>`;
+	bulletbar.innerHTML = `<iframe width="100%" height="100%" src="http://54.213.44.54:3000/dm/dm.html?room=`+hashUrl+`" frameborder="0" allowfullscreen></iframe>`;
 	bulletbar.style.cssText = "\
 		position:fixed;\
 		color:rgb(255,255,255);\

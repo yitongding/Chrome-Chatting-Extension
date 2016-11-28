@@ -117,6 +117,7 @@ function query() {
 
 var socket = io();
 
+/*
 function send() {
   var text = document.getElementById('text').value;
   var color = document.getElementById('color').value;
@@ -126,7 +127,7 @@ function send() {
   var message = text;
   socket.emit('new message', message);
 };
-
+*/
 //  var text_obj='{ "text":"'+text+'","color":"'+color+'","size":"'+size+'","position":"'+position+'","time":'+time+'}';
 //  $.post("stone.php",{danmu:text_obj});
 socket.on('new message', function (message) {
@@ -139,7 +140,7 @@ socket.on('new message', function (message) {
   var new_obj = eval('(' + text_obj + ')');
 
   $('#danmu').danmu("add_danmu", new_obj);
-  document.getElementById('text').value = '';
+  //document.getElementById('text').value = '';
 });
 
 socket.on('established', function (data) {
