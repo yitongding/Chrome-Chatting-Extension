@@ -1,5 +1,5 @@
 // Angular module, defining routes for the app
-angular.module('chatApp', ['md5','chart.js', 'ui.bootstrap', 'ngRoute', 'chatServices', 'ezfb'])
+angular.module('chatApp', ['chart.js', 'ui.bootstrap', 'ngRoute', 'chatServices', 'ezfb'])
   .config(['$routeProvider', function($routeProvider) {
     $routeProvider.
     when('/chat/:room', {
