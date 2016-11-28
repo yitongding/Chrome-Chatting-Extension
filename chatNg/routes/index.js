@@ -217,6 +217,7 @@ module.exports = function (io) {
 
     socket.on("room url", function (room) {
       socket.room = room;
+      console.log("user join room <"+room+">");
       socket.join(room);
       ip = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address.address;
     });
@@ -231,7 +232,7 @@ module.exports = function (io) {
 
     socket.on('new message', function (message) {
       // log it to the Node.JS output
-      console.log("user <" + socket.username + "> message <" + message.text + "> in room <" + socket.room + "> anonymous<" + message.anonymous);
+      console.log("user <" + socket.username + "> message <" + message.text + "> in room <" + socket.room + ">");
 
       var text = message.text;
       var username = (message.anonymous) ? "anonymous" : socket.username;
@@ -250,8 +251,6 @@ module.exports = function (io) {
         roomObj.save(function (err, roomObj) {
           if (err) console.log(err);
           // broadcast message to the room
-          console.log('ready to send message');
-          console.log(username + ' in ' + socket.room);
           io.to(socket.room).emit('new message', {
             username: username,
             message: text,
@@ -308,6 +307,27 @@ module.exports = function (io) {
             socket.emit('myvote', myvote);
             socket.to(socket.room).emit('vote', tmppoll);
           });
+        });
+      });
+    });
+
+
+    socket.on("close vote", function(pollId) {
+      Poll.findById(pollId, function(errr, poll) {
+        poll.closed = true;
+        poll.save(function(err){
+          if (err) console.log(err);
+          socket.to(socket.room).emit("close vote", pollId);
+        });
+      });
+    });
+
+    socket.on("open vote", function(pollId) {
+      Poll.findById(pollId, function(err, poll){
+        poll.closed = false;
+        poll.save(function(err) {
+          if (err) console.log(err);
+          socket.to(socket.room).emit("open vote", pollId);
         });
       });
     });

@@ -18,6 +18,7 @@ var PollSchema = new mongoose.Schema({
 	question: { type: String, required: true },
 	choices: [choiceSchema],
   host: {type: String},
+  closed: {type: Boolean, default: false},
   room: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Room'

@@ -27,7 +27,7 @@ var local_username = "anonymous";
 function createSideBar(url, username, option) {
 	var sidebar = document.createElement('div');
 	sidebar.id = "mySidebar";
-	sidebar.innerHTML = `<iframe width="100%" height="100%" src="http://54.213.44.54:3000?url='`+encodeURIComponent(url)+`'&username='`+encodeURIComponent(username)+`'" frameborder="0" allowfullscreen></iframe>`;
+	sidebar.innerHTML = `<iframe width="100%" height="100%" src="http://54.213.44.54:3000/#/chat/`+encodeURIComponent(url)+`" frameborder="0" allowfullscreen></iframe>`;
 	sidebar.style.cssText = "\
 		position:fixed;\
 		color:rgb(255,255,255);\

@@ -15,6 +15,7 @@ function ChatMsgCtrl($scope, $rootScope, $routeParams, socket, lastTenMsg, topFi
 
 	socket.on('established', function (data) {
 		console.log(data);
+		console.log("user url:"+$routeParams.room);
 		socket.emit('room url', $routeParams.room);
 	});
 
