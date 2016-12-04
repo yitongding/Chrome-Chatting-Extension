@@ -10,6 +10,10 @@ angular.module('chatApp', ['chart.js', 'ui.bootstrap', 'ngRoute', 'chatServices'
       templateUrl: 'partials/history.html',
       controller: ChatHistoryCtrl
     }).
+    when('/polls/:room/new', {
+      templateUrl: 'partials/newpoll.html',
+      controller: NewPollCtrl
+    }).
     when('/polls/:room/:pollId', {
       templateUrl: 'partials/poll.html',
       controller: PollCtrl
@@ -18,11 +22,6 @@ angular.module('chatApp', ['chart.js', 'ui.bootstrap', 'ngRoute', 'chatServices'
       templateUrl: 'partials/pollList.html',
       controller: PollListCtrl
     }).
-    when('/polls/:room/new', {
-      templateUrl: 'partials/newpoll.html',
-      controller: NewPollCtrl
-    }).
-
     // If invalid route, just redirect to the main list view
     otherwise({
       redirectTo: '/chat/' + encodeURIComponent("54.213.44.54:3000")

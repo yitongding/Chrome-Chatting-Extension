@@ -259,7 +259,7 @@ function NewPollCtrl($scope, $location, $routeParams, Poll) {
 			alert('You must enter a question');
 		}
 	};
-}
+};
 
 angular.module('chatApp').controller('NavbarCtrl',
 	function NavbarCtrl($scope, $rootScope, $routeParams, socket, ezfb) {
