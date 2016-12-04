@@ -53,10 +53,12 @@ $(function() {
 				if (sidebarOpen) {
 					$('.connectBtn').text("Disconncet");
 					$('.visibleBtn').text("Hide Chat").removeAttr("disabled");
+					$('.bulletModeBtn').text("Show Bullet Mode").removeAttr("disabled");
 				}
 				else {
 					$('.connectBtn').text("Conncet");
 					$('.visibleBtn').text("Show Chat").attr("disabled", true);
+					$('.bulletModeBtn').text("Show Bullet Mode").attr("disabled", true);
 				}
 			});
 
