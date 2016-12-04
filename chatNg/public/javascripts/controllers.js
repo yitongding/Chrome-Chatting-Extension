@@ -263,7 +263,7 @@ function NewPollCtrl($scope, $location, $routeParams, Poll) {
 
 angular.module('chatApp').controller('NavbarCtrl',
 	function NavbarCtrl($scope, $rootScope, $routeParams, socket, ezfb) {
-
+		$scope.isNavCollapsed = true;
 		// $scope.room = $routeParams.room;
 		updateLoginStatus(updateApiMe);
 
