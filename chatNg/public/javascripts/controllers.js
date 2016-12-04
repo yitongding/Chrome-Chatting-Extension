@@ -15,7 +15,7 @@ function ChatMsgCtrl($scope, $rootScope, $routeParams, socket, lastTenMsg, topFi
 
 	socket.on('established', function (data) {
 		console.log(data);
-		console.log("user url:"+$routeParams.room);
+		console.log("user url:" + $routeParams.room);
 		socket.emit('room url', $routeParams.room);
 	});
 
@@ -135,6 +135,7 @@ function PollCtrl($scope, $routeParams, socket, Poll) {
 		pollId: $routeParams.pollId
 	});
 
+	/*
 	$scope.chartLabels = $scope.poll.choices.map(function(choice){
 		return choice.text;
 	});
@@ -142,6 +143,18 @@ function PollCtrl($scope, $routeParams, socket, Poll) {
 	$scope.chartData = $scope.poll.choices.map(function(choice){
 		return choice.counts;
 	});
+	*/
+
+	$scope.$watch("poll", function (newValue, oldValue) {
+		$scope.chartLabels = newValue.choices.map(function (choice) {
+			return choice.text;
+		});
+		$scope.chartData = newValue.choices.map(function (choice) {
+			return choice.counts;
+		});
+	});
+
+
 
 	socket.on('myvote', function (data) {
 		if ($scope.poll._id === data._id) {
@@ -157,14 +170,14 @@ function PollCtrl($scope, $routeParams, socket, Poll) {
 		}
 	});
 
-	socket.on('close vote', function(data) {
-		if (data== $scope.poll._id) {
+	socket.on('close vote', function (data) {
+		if (data == $scope.poll._id) {
 			$scope.poll.closed = true;
 		}
 	});
 
-	socket.on('open vote', function(data) {
-		if (data== $scope.poll._id) {
+	socket.on('open vote', function (data) {
+		if (data == $scope.poll._id) {
 			$scope.poll.closed = false;
 		}
 	});
