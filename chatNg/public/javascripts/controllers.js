@@ -147,10 +147,11 @@ function PollCtrl($scope, $routeParams, socket, Poll) {
 
 	$scope.$watch("poll", function (newValue, oldValue) {
 		console.log(newValue);
-		$scope.chartLabels = newValue.choices.map(function (choice) {
+		var tmp = toObject(newValue);
+		$scope.chartLabels = tmp.choices.map(function (choice) {
 			return choice.text;
 		});
-		$scope.chartData = newValue.choices.map(function (choice) {
+		$scope.chartData = tmp.choices.map(function (choice) {
 			return choice.counts;
 		});
 	}, true);
