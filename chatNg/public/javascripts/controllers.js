@@ -147,7 +147,7 @@ function PollCtrl($scope, $routeParams, socket, Poll) {
 
 	$scope.$watch("poll", function (newValue, oldValue) {
 		console.log(newValue);
-		var tmp = toObject(newValue);
+		var tmp = newValue.toObject();
 		$scope.chartLabels = tmp.choices.map(function (choice) {
 			return choice.text;
 		});
