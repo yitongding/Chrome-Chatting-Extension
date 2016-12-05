@@ -146,7 +146,6 @@ function PollCtrl($scope, $routeParams, socket, Poll) {
 				return choice.counts;
 			});
 		}
-		$scope.$digest();
 	}, true);
 
 
@@ -154,7 +153,6 @@ function PollCtrl($scope, $routeParams, socket, Poll) {
 		if ($scope.poll._id === data._id) {
 			$scope.poll.userVoted = data.userVoted;
 			$scope.poll.userChoice = data.userChoice;
-			$scope.$digest();
 		}
 	});
 
@@ -162,7 +160,6 @@ function PollCtrl($scope, $routeParams, socket, Poll) {
 		if ($scope.poll._id === data._id) {
 			$scope.poll.choices = data.choices;
 			$scope.poll.totalVotes = data.totalVotes;
-			$scope.$digest();
 		}
 	});
 
@@ -170,14 +167,12 @@ function PollCtrl($scope, $routeParams, socket, Poll) {
 		if (data == $scope.poll._id) {
 			$scope.poll.closed = true;
 		}
-		$scope.$digest();
 	});
 
 	socket.on('open vote', function (data) {
 		if (data == $scope.poll._id) {
 			$scope.poll.closed = false;
 		}
-		$scope.$digest();
 	});
 
 	$scope.vote = function (poll) {
