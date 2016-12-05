@@ -279,7 +279,7 @@ module.exports = function (io) {
     socket.on('vote', function (data) {
       Poll.findById(data.poll_id, function (err, poll) {
 
-        poll.upvote(data.choice, ip, function () {
+        poll.upvote(data.choice, socket.FBid, function () {
           var choice = poll.choices.id(data.choice);
           var myvote = {
             _id: poll._id,

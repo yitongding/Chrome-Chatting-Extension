@@ -29,13 +29,14 @@
 	</div>
 </div>
 <div ng-show="poll.userVoted || poll.closed">
-	<canvas id="bar" class="chart chart-bar" chart-data="chartData" chart-labels="chartLabels"/>
-	<!-- 
+	<!--<canvas id="bar" class="chart chart-bar" chart-data="chartData" chart-labels="chartLabels"/>
+	-->
+	
 	<table class="result-table">
 		<tr ng-repeat="choice in poll.choices">
 			<td>{{choice.text}}</td>
 			<td>
-				<table style="background-color: lightblue; width: {{choice.counts/poll.totalVotes*100}}%; text-align: right">
+				<table style="background-color: green; width: {{choice.counts}}/{{poll.totalVotes}}*100%; text-align: right">
 					<tr>
 						<td>{{choice.counts}}</td>
 					</tr>
@@ -43,7 +44,8 @@
 			</td>
 		</tr>
 	</table>
-	-->
+	
+	<
 	<p>
 		<em>
 			{{poll.totalVotes}} votes counted so far.
