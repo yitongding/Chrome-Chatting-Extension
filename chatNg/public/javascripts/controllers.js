@@ -135,30 +135,19 @@ function PollCtrl($scope, $routeParams, socket, Poll) {
 		pollId: $routeParams.pollId
 	});
 
-	/*
-	$scope.chartLabels = $scope.poll.choices.map(function(choice){
-		return choice.text;
-	});
-
-	$scope.chartData = $scope.poll.choices.map(function(choice){
-		return choice.counts;
-	});
-	*/
-
 	$scope.$watch("poll", function (newValue, oldValue, scope) {
 		//console.log(scope.poll);
 		var choices = $scope.poll.choices;
 		if (choices) {
-			$scope.chartLabels = tmp.choices(function (choice) {
+			$scope.chartLabels = choices.map(function (choice) {
 				return choice.text;
 			});
-			$scope.chartData = tmp.map(function (choice) {
+			$scope.chartData = choices.map(function (choice) {
 				return choice.counts;
 			});
 		}
 		
 	}, true);
-
 
 
 	socket.on('myvote', function (data) {
