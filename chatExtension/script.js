@@ -16,6 +16,9 @@ function handleMessage(
 ) {
 	if (request.type == "connect") {
 		toggleSidebar(request.data, "connection");
+		sendResponse({
+			hash: hashUrl
+		});
 	}
 
 	if (request.type == "showChat")
@@ -28,10 +31,12 @@ function handleMessage(
 		toggleSidebar(request.data, "bulletMode");
 
 	if (request.type == "getStatus")
+		hashUrl = request.data.url.split("?")[0].split("#")[0].hashCode();
 		sendResponse({
 			sidebarOpen: sidebarOpen,
 			sidebarVisible: sidebarVisible,
-			bulletbarVisible: bulletbarVisible
+			bulletbarVisible: bulletbarVisible,
+			hash: hashUrl
 		});
 }
 
@@ -47,8 +52,6 @@ var local_username = "anonymous";
 var hashUrl;
 function createSideBar(url, option) {
 	var sidebar = document.createElement('div');
-	hashUrl = url.split("?")[0].split("#")[0].hashCode();
-	jquery('#qrcode').qrcode("http://54.213.44.54:3000/#/chat/"+hashUrl);
 	sidebar.id = "mySidebar";
 	sidebar.innerHTML = `<iframe width="100%" height="100%" src="http://54.213.44.54:3000/#/chat/` + hashUrl + `" frameborder="0" allowfullscreen></iframe>`;
 	sidebar.style.cssText = "\
@@ -80,7 +83,7 @@ function createBulletBar(url, option) {
 		height:80%;\
 		background:rgba(0,0,0,0);\
 		box-shadow:inset 0 0 0.0em black;\
-		z-index:2147483648;\
+		z-index:2147483647;\
 	";
 	document.body.appendChild(bulletbar);
 	bulletbarOpen = true;

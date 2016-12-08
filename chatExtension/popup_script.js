@@ -40,7 +40,7 @@ $(function() {
 	var sidebarOpen = false;
 	var sidebarVisible = false;
 	var bulletVisble = false;
-
+	var hashshown = false;
 	chrome.tabs.query({
 		active: true,
 		currentWindow: true
@@ -57,7 +57,7 @@ $(function() {
 		};
 
 
-		sendMessage('getStatus', {}, function(status) {
+		sendMessage('getStatus', {url: tabs[0].url}, function(status) {
 			
 			if (status.sidebarOpen) {
 				$('.connectBtn').text("Disconncet");
@@ -73,12 +73,18 @@ $(function() {
 				}
 			} 
 			
+			if (hashshown == false) {
+				var qrobj = {width: 64,height: 64,text: "http://54.213.44.54:3000/#/chat/"+status.hash};
+				jQuery('#qrcode').qrcode(qrobj);
+			}
+			
 			$('.connectBtn').click(function() {
 				sidebarOpen = !sidebarOpen;
 				sidebarVisible = !sidebarVisible;
 				sendMessage('connect', {
 					url: tabs[0].url,
 				}, null);
+
 				if (sidebarOpen) {
 					$('.connectBtn').text("Disconncet");
 					$('.visibleBtn').text("Hide Chat").removeAttr("disabled");

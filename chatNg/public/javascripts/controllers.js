@@ -74,11 +74,11 @@ function ChatMsgCtrl($scope, $rootScope, $routeParams, socket, lastTenMsg, topFi
 		});
 	};
 
-	$scope.closeAlert = function() {
+	$scope.closeAlert = function(index) {
 		$scope.alerts.splice(index, 1);
 	};
 
-	$scope.undoBlock = function() {
+	$scope.undoBlock = function(index) {
 		$scope.alerts.splice(index, 1);
 		$scope.blockList.pop();
 		$scope.alerts.push({
