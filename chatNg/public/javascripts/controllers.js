@@ -114,6 +114,7 @@ function ChatMsgCtrl($scope, $rootScope, $routeParams, socket, lastTenMsg, topFi
 		if (event.which === 13) {
 			sendMessage();
 		}
+
 	});
 }
 
