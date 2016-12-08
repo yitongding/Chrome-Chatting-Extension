@@ -35,13 +35,7 @@
 	<table class="result-table">
 		<tr ng-repeat="choice in poll.choices">
 			<td>{{choice.text}}</td>
-			<td>
-				<table style="background-color: green; width: {{choice.counts}}/{{poll.totalVotes}}*100%; text-align: right">
-					<tr>
-						<td>{{choice.counts}}</td>
-					</tr>
-				</table>
-			</td>
+			<td>{{choice.counts}}</td>
 		</tr>
 	</table>
 	
