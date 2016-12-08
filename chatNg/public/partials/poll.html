@@ -31,15 +31,16 @@
 <div ng-show="poll.userVoted || poll.closed && FBloginStatus.status == 'connected'">
 	<!--<canvas id="bar" class="chart chart-bar" chart-data="chartData" chart-labels="chartLabels"/>
 	-->
-	
-	<table class="result-table">
+	<table class="result-table table">
+		<tr> 
+			<td>Choice</td>
+			<td>Counts</td>
+		</tr>
 		<tr ng-repeat="choice in poll.choices">
 			<td>{{choice.text}}</td>
 			<td>{{choice.counts}}</td>
 		</tr>
 	</table>
-	
-	<
 	<p>
 		<em>
 			{{poll.totalVotes}} votes counted so far.
