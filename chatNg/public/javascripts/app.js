@@ -22,6 +22,10 @@ angular.module('chatApp', ['chart.js', 'ui.bootstrap', 'ngRoute', 'chatServices'
       templateUrl: 'partials/pollList.html',
       controller: PollListCtrl
     }).
+    when('/chat/:room/topfive', {
+      templateUrl: 'partials/topfive.html',
+      controller: TopfiveCtrl
+    }).
     // If invalid route, just redirect to the main list view
     otherwise({
       redirectTo: '/chat/' + encodeURIComponent("54.213.44.54:3000")

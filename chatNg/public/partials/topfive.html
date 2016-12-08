@@ -1,0 +1,10 @@
+<ul id="topFive" class="topFive">
+    <li ng-repeat="message in topFives">
+        <span class="username">{{message.username}}</span>
+        <span class="messageBody">{{message.message}}</span>
+        <div class="likeBtn btn btn-default" ng-click="likeMsg(message)" ng-disabled="message.likeBtn" id="{{message.id}}">
+            <span class="glyphicon glyphicon-thumbs-up"></span>
+            <span class="likeCount">{{message.upvotes}}</span>
+        </div>
+    </li>
+</ul>
