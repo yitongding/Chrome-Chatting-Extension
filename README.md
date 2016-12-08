@@ -11,6 +11,7 @@ This is a chrome extension allowed people viewing the same webpage to chat with 
 1. enter the folder you want to run
 2. `npm install`
 3. `npm bin/www` , then the server will run on port 3000
+
 ### use PM2
 1. enter the folder you want to run
 2. npm install pm2 -g
