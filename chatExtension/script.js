@@ -1,18 +1,19 @@
-String.prototype.hashCode = function() {
-  var hash = 0, i, chr, len;
-  if (this.length === 0) return hash;
-  for (i = 0, len = this.length; i < len; i++) {
-    chr   = this.charCodeAt(i);
-    hash  = ((hash << 5) - hash) + chr;
-    hash |= 0; // Convert to 32bit integer
-  }
-  return hash;
+String.prototype.hashCode = function () {
+	var hash = 0,
+		i, chr, len;
+	if (this.length === 0) return hash;
+	for (i = 0, len = this.length; i < len; i++) {
+		chr = this.charCodeAt(i);
+		hash = ((hash << 5) - hash) + chr;
+		hash |= 0; // Convert to 32bit integer
+	}
+	return hash;
 };
 
 function handleMessage(
-	request, 
+	request,
 	sender, sendResponse
-	) {
+) {
 	if (request.type == "connect") {
 		toggleSidebar(request.data, "connection");
 	}
@@ -27,7 +28,11 @@ function handleMessage(
 		toggleSidebar(request.data, "bulletMode");
 
 	if (request.type == "getStatus")
-		sendResponse({sidebarOpen: sidebarOpen, sidebarVisible: sidebarVisible, bulletbarVisible: bulletbarVisible});
+		sendResponse({
+			sidebarOpen: sidebarOpen,
+			sidebarVisible: sidebarVisible,
+			bulletbarVisible: bulletbarVisible
+		});
 }
 
 chrome.extension.onMessage.addListener(handleMessage);
@@ -37,23 +42,24 @@ var sidebarVisible = false;
 var bulletbarOpen = false;
 var bulletbarVisible = false;
 var local_username = "anonymous";
+//move hasUrl out
+
 
 function createSideBar(url, option) {
 	var sidebar = document.createElement('div');
 	var hashUrl = url.split("?")[0].split("#")[0].hashCode();
-	
 	sidebar.id = "mySidebar";
-	sidebar.innerHTML = `<iframe width="100%" height="100%" src="http://54.213.44.54:3000/#/chat/`+hashUrl+`" frameborder="0" allowfullscreen></iframe>`;
+	sidebar.innerHTML = `<iframe width="100%" height="100%" src="http://54.213.44.54:3000/#/chat/` + hashUrl + `" frameborder="0" allowfullscreen></iframe>`;
 	sidebar.style.cssText = "\
 		position:fixed;\
 		color:rgb(255,255,255);\
 		top:0px;\
 		right:0px;\
-		width:100%;\
+		width:30%;\
 		height:100%;\
 		background:rgba(0,0,0,0);\
 		box-shadow:inset 0 0 0.0em black;\
-		z-index:999999;\
+		z-index:2147483648;\
 	";
 	document.body.appendChild(sidebar);
 	sidebarOpen = true;
@@ -64,17 +70,17 @@ function createBulletBar(url, option) {
 	var bulletbar = document.createElement('div');
 	var hashUrl = url.split("?")[0].split("#")[0].hashCode();
 	bulletbar.id = "myBulletbar";
-	bulletbar.innerHTML = `<iframe width="100%" height="100%" src="http://54.213.44.54:3000/dm/dm.html?room=`+hashUrl+`" frameborder="0" allowfullscreen></iframe>`;
+	bulletbar.innerHTML = `<iframe width="100%" height="100%" src="http://54.213.44.54:3000/dm/dm.html?room=` + hashUrl + `" frameborder="0" allowfullscreen></iframe>`;
 	bulletbar.style.cssText = "\
 		position:fixed;\
 		color:rgb(255,255,255);\
 		top:0px;\
 		right:0px;\
 		width:100%;\
-		height:100%;\
+		height:80%;\
 		background:rgba(0,0,0,0);\
 		box-shadow:inset 0 0 0.0em black;\
-		z-index:999999;\
+		z-index:2147483648;\
 	";
 	document.body.appendChild(bulletbar);
 	bulletbarOpen = true;
@@ -103,14 +109,17 @@ function toggleSidebar(data, option) {
 	}
 	if (option == "bulletMode") {
 		var url = data.url;
-		if (bulletbarVisible) {
-			jQuery('#myBulletbar').remove();
+		if (bulletbarOpen) {
+			if (bulletbarVisible) {
+				jQuery('#myBulletbar').hide();
 
+			} else {
+				jQuery('#myBulletbar').show();
+			}
 		} else {
 			createBulletBar(url, null);
 		}
-		//jQuery('#mySidebar').remove();
-		
+
 	}
 
 }

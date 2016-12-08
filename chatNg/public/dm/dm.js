@@ -17,7 +17,6 @@
 })(jQuery);
 
 
-query();
 timedCount();
 
 var getUrlParameter = function getUrlParameter(sParam) {
@@ -99,16 +98,6 @@ function insert() {
     danmu: str_newd
   }, function (data, status) {
     alert(data)
-  });
-}
-
-function query() {
-  $.get("query.php", function (data, status) {
-    var danmu_from_sql = eval(data);
-    for (var i = 0; i < danmu_from_sql.length; i++) {
-      var danmu_ls = eval('(' + danmu_from_sql[i] + ')');
-      $('#danmu').danmu("add_danmu", danmu_ls);
-    }
   });
 }
 
