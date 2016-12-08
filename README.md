@@ -3,13 +3,15 @@ This is a chrome extension allowed people viewing the same webpage to chat with 
 
 ##About the folders
 ###Back-ends
-- "chatDemo" have the demo chat website from socket.io
-- "chatHelp" used to test funcitions or prototypes
-- "chatDev"  used to implant the real back-end of the extension
-- "DM" is the Chrome extension prototype
+- "chatNg": Sever side code
+- "chatExtension": Chrome extension code
 
-##How to Run
-###Back-ends
+##How to Run the Sever
+### use npm
 1. enter the folder you want to run
 2. `npm install`
 3. `npm bin/www` , then the server will run on port 3000
+### use PM2
+1. enter the folder you want to run
+2. npm install pm2 -g
+3. pm2 start ./bin/www
