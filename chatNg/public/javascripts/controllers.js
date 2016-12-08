@@ -269,10 +269,42 @@ function NewPollCtrl($scope, $location, $routeParams, Poll) {
 	};
 };
 
-function TopfiveCtrl($scope, $location, $routeParams, topFiveMsg) {
+function TopfiveCtrl($scope, $location, $routeParams, socket, topFiveMsg) {
 	$scope.topFives = topFiveMsg.get({
 		room: $routeParams.room
 	});
+
+	socket.on("likeMsg", function(message) {
+		var idx = $scope.messages.findIndex(function(el) {
+			if (el._id == message._id) return true;
+			else return false;
+		});
+		if (idx != -1)
+			$scope.messages[idx].upvotes = message.upvotes;
+		idx = $scope.lastTenMsg.findIndex(function(el) {
+			if (el._id == message._id) return true;
+			else return false;
+		});
+		if (idx != -1)
+			$scope.lastTenMsg[idx].upvotes = message.upvotes;
+
+	});
+
+	socket.on("top five", function(messages) {
+		$scope.topFives = messages;
+	});
+
+
+	$scope.likeMsg = function(message) {
+		message.likeBtn = true;
+		var room = $routeParams.room,
+			msgId = message._id;
+		var likeObj = {
+			room: room,
+			msgId: msgId
+		};
+		socket.emit('likeMsg', likeObj);
+	};
 }
 
 angular.module('chatApp').controller('NavbarCtrl',
