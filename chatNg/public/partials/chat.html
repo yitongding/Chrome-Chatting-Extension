@@ -34,8 +34,11 @@
 					<span class="glyphicon glyphicon-eye-close"></span>
 				</div>
 			</li>
-
-			<li ng-repeat="message in lastTenMsg | orderBy:'-'" >
+			<li>
+				<span class="username">SYSTEM</span>
+				<span class="messageBody">^^^^ Last Ten Messages ^^^^</span>
+			</li>
+			<li ng-repeat="message in lastTenMsg | orderBy:'-'">
 				<span class="username">{{message.username}}</span>
 				<span class="messageBody">{{message.message}}</span>
 				<div class="likeBtn btn btn-default" ng-click="likeMsg(message)" ng-disabled="message.likeBtn" id="{{message.id}}">
@@ -43,17 +46,13 @@
 					<span class="likeCount">{{message.upvotes}}</span>
 				</div>
 			</li>
-			<li>
-				<span class="username">SYSTEM</span>
-				<span class="messageBody">^^^^ Last Ten Messages ^^^^</span>
-			</li>
-			
 		</ul>
 	</div>
 </div>
-<div class="inputArea" >
+<div class="inputArea">
 	<div class="checkbox" ng-model="anonymous">
 		<label><input type="checkbox" class="anonymousCheckbox" ng-checked="anonymous" value="">Anonymous</label>
 	</div>
-	<input class="inputMessage" placeholder="Type here..." ng-disabled="!FBloginStatus || FBloginStatus.status != 'connected'" />
+	<input class="inputMessage" placeholder="Type here..." ng-disabled="!FBloginStatus || FBloginStatus.status != 'connected'"
+	/>
 </div>
