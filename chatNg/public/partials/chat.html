@@ -1,4 +1,5 @@
 <div class="chatArea">
+	<!--
 	<div class="topFiveArea">
 		<button type="button" class="btn btn-default" ng-click="topFiveCollapsed = !topFiveCollapsed">Top Five Likes</button>
 		<div uib-collapse="topFiveCollapsed">
@@ -14,6 +15,7 @@
 			</ul>
 		</div>
 	</div>
+	-->
 	<div class="alertContainner">
 		<div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)">{{alert.msg}}</div>
 	</div>
