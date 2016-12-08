@@ -44,10 +44,10 @@ var bulletbarVisible = false;
 var local_username = "anonymous";
 //move hasUrl out
 
-
+var hashUrl;
 function createSideBar(url, option) {
 	var sidebar = document.createElement('div');
-	var hashUrl = url.split("?")[0].split("#")[0].hashCode();
+	hashUrl = url.split("?")[0].split("#")[0].hashCode();
 	sidebar.id = "mySidebar";
 	sidebar.innerHTML = `<iframe width="100%" height="100%" src="http://54.213.44.54:3000/#/chat/` + hashUrl + `" frameborder="0" allowfullscreen></iframe>`;
 	sidebar.style.cssText = "\
@@ -68,7 +68,6 @@ function createSideBar(url, option) {
 
 function createBulletBar(url, option) {
 	var bulletbar = document.createElement('div');
-	var hashUrl = url.split("?")[0].split("#")[0].hashCode();
 	bulletbar.id = "myBulletbar";
 	bulletbar.innerHTML = `<iframe width="100%" height="100%" src="http://54.213.44.54:3000/dm/dm.html?room=` + hashUrl + `" frameborder="0" allowfullscreen></iframe>`;
 	bulletbar.style.cssText = "\
@@ -116,6 +115,7 @@ function toggleSidebar(data, option) {
 			} else {
 				jQuery('#myBulletbar').show();
 			}
+			bulletbarVisible = !bulletbarVisible;
 		} else {
 			createBulletBar(url, null);
 		}
